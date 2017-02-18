@@ -1,0 +1,7 @@
+LogItemIntent I ate {ItemName}
+LogItemIntent I ate a {ItemName}
+LogItemIntent I had a {ItemName}
+LogItemIntent I had {ItemName}
+
+LogMultipleItemsIntent I ate {ItemNumber} {ItemName}
+

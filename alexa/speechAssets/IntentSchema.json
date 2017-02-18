@@ -1,0 +1,34 @@
+{
+  "intents": [
+    { "intent": "LogItemIntent",
+      "slots": [
+        {
+          "name": "ItemName",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    },
+    {
+      "intent": "LogMultipleItemsIntent",
+      "slots": [
+        {
+          "name": "ItemNumber",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "ItemName",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
