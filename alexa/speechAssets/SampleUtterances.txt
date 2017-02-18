@@ -5,3 +5,5 @@ LogItemIntent I had {ItemName}
 
 LogMultipleItemsIntent I ate {ItemNumber} {ItemName}
 
+HowAmIDoingIntent How am I doing
+
