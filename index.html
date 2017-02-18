@@ -22,6 +22,7 @@
     <link href="assets/css/style-responsive.css" rel="stylesheet">
 
     <script src="assets/js/chart-master/Chart.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
     
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -381,6 +382,10 @@
                   <i class="fa fa-angle-up"></i>
               </a>
           </div>
+<body>
+<input style="float: right" id="readItem" type="button" value="Read Item" onclick="readItem();" />
+<br><br>
+<textarea style="float: right" readonly id= "textarea" style="width:400px; height:200px"></textarea>
       </footer>
       <!--footer end-->
 
@@ -439,6 +444,48 @@
         }
     </script>
   
+    <!-- AWS -->
+    <script>
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            // accessKeyId default can be used while using the downloadable version of DynamoDB. 
+            // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
+            accessKeyId: "AKIAJKTVMITXX54WN63A",
+            // secretAccessKey default can be used while using the downloadable version of DynamoDB. 
+            // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
+            secretAccessKey: "JYmy09GkAXHBzQj9yub+XGRigSIpbTZ4LZtRTFu0"
+        });
+
+        var docClient = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+
+        function readItem() {
+            var table = "LoggedItems";
+            var logTime = "myTimeStamp";
+
+            var params = {
+                TableName: table,
+                Key: {
+                    TimeOfLog: { S: 'myTimeStamp' }
+                }
+            };
+            
+            docClient.getItem(params, function(err, data) {
+                console.log(err);
+                console.log(data);
+                if (err) {
+                    document.getElementById('textarea').innerHTML = "Unable to read item: " + "\n" + JSON.stringify(err, undefined, 2);
+                } else {
+                    document.getElementById('textarea').innerHTML = "GetItem succeeded: " + "\n" + JSON.stringify(data, undefined, 2);
+                }
+            });
+        }
+
+        var db = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+            db.listTables(function(err, data) { 
+            console.log(data.TableNames);
+        });
+    </script>
 
   </body>
 </html>
