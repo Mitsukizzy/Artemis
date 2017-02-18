@@ -1,5 +1,6 @@
 'use strict';
 var Alexa = require("alexa-sdk");
+var AWS = require("aws-sdk");
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
@@ -15,8 +16,32 @@ var handlers = {
         /*
         Intended to calculate the caloric count of an item, then add it as an item to our database
         */
-        var speechOutput = 'I invoked the LogItemIntent ' + this.event.request.intent.slots.ItemName.value;
-        this.emit(':tell', speechOutput);
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            accessKeyId: 'AKIAJKTVMITXX54WN63A',
+            secretAccessKey: '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'
+        });
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+
+        var myIntent = this.event.request.intent;
+        var myItemName = myIntent.slots.ItemName.value;
+
+        var table = 'LoggedItems';
+        var params = {
+            TableName: table,
+            Item: {
+                TimeOfLog: 'yetanotherTEst',
+                Calories: 120
+            }
+        };
+
+        var speechOutput = 'I invoked the LogItemIntent';
+        docClient.put(params).promise().then((data) => {
+            this.emit(':tell', speechOutput);
+        }).catch((err) => console.log(err));
+
     },
     'LogMultipleItemsIntent': function () {
         var myIntent = this.event.request.intent;
