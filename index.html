@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dashboard">
-    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <meta name="keyword" content="Artemis, fitness, nutrition, amazon, alexa, log, food, water">
 
-    <title>DASHGUM - FREE Bootstrap Admin Template</title>
+    <title>Artemis - Track your nutrition intake using Amazon Alexa</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                   <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
               </div>
             <!--logo start-->
-            <a href="index.html" class="logo"><b>ALEXILOG</b></a>
+            <a href="index.html" class="logo"><b>ARTEMIS</b></a>
             <!--logo end--> 
             <div class="top-menu">
             	<ul class="nav pull-right top-menu">
@@ -381,11 +381,12 @@
               <a href="index.html#" class="go-top">
                   <i class="fa fa-angle-up"></i>
               </a>
-          </div>
-<body>
-<input style="float: right" id="readItem" type="button" value="Read Item" onclick="readItem();" />
-<br><br>
-<textarea style="float: right" readonly id= "textarea" style="width:400px; height:200px"></textarea>
+            </div>
+            
+            <body>
+            <input style="float: right" id="readItem" type="button" value="Read Item" onclick="readItem();" />
+            <br><br>
+            <textarea style="float: right" readonly id= "textarea" style="width:400px; height:200px"></textarea>
       </footer>
       <!--footer end-->
 
@@ -446,9 +447,11 @@
   
     <!-- AWS -->
     <script>
+        var foodItems = [];
+        
         AWS.config.update({
             region: "us-east-1",
-            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            endpoint: 'https://dynamodb.us-east-1.amazonaws.com',
             // accessKeyId default can be used while using the downloadable version of DynamoDB. 
             // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
             accessKeyId: "AKIAJKTVMITXX54WN63A",
@@ -457,32 +460,42 @@
             secretAccessKey: "JYmy09GkAXHBzQj9yub+XGRigSIpbTZ4LZtRTFu0"
         });
 
-        var docClient = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+        var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
         function readItem() {
-            var table = "LoggedItems";
+            var table = 'LoggedItems';
             var logTime = "myTimeStamp";
 
-            var params = {
+            var itemParams = {
                 TableName: table,
                 Key: {
-                    TimeOfLog: { S: 'myTimeStamp' }
+                    TimeOfLog: logTime
                 }
             };
-            
-            docClient.getItem(params, function(err, data) {
-                console.log(err);
-                console.log(data);
+            docClient.get(itemParams, function(err, data) {
                 if (err) {
-                    document.getElementById('textarea').innerHTML = "Unable to read item: " + "\n" + JSON.stringify(err, undefined, 2);
+                    console.log(err);
                 } else {
-                    document.getElementById('textarea').innerHTML = "GetItem succeeded: " + "\n" + JSON.stringify(data, undefined, 2);
+                    console.log('Added new item', data);
                 }
             });
         }
 
+        // Get all the timestamps and order it
+        var db = new AWS.DynamoDB.DocumentClient();
+        db.scan({
+            TableName: 'LoggedItems',
+            
+        }, (err, data) => {
+            if(err) console.error(err);
+            else {
+                foodItems = data.Items;
+                console.log('Scan success. Data: ', foodItems);
+            }
+        });
+
         var db = new AWS.DynamoDB({apiVersion: '2012-08-10'});
-            db.listTables(function(err, data) { 
+        db.listTables(function(err, data) { 
             console.log(data.TableNames);
         });
     </script>
