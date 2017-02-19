@@ -1,3 +1,31 @@
+<?php
+ini_set('display_errors', 1);
+require '/home/isaben1/php/aws/aws-autoloader.php';
+
+date_default_timezone_set('UTC');
+
+use Aws\DynamoDb\Exception\DynamoDbException;
+use Aws\DynamoDb\Marshaler;
+
+$sdk = new Aws\Sdk([
+    'region'   => 'us-east-1',
+    'version'  => 'latest',
+    'endpoint' => 'https://dynamodb.us-east-1.amazonaws.com',
+    'credentials' => [
+        'key'    => 'AKIAJKTVMITXX54WN63A',
+        'secret' => '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'
+    ]
+]);
+
+
+$dynamodb = $sdk->createDynamoDb();
+$marshaler = new Marshaler();
+
+$tableName = 'LoggedItems';
+unset($response); 
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -83,7 +111,7 @@
                           <span>Charts</span>
                       </a>
                       <ul class="sub">
-                          <li><a class="active" href="blank.html">Blank Page</a></li>
+                          <li><a class="active" href="blank.php">Blank Page</a></li>
                           <li><a href="chartjs.html">Chartjs</a></li>
                       </ul>
                   </li>
@@ -102,6 +130,39 @@
       <section id="main-content">
           <section class="wrapper">
             
+          <h4><i class="fa fa-angle-right"></i>Recently Logged</h4>
+                <section id="unseen">
+                <table class="table table-bordered table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th class="numeric">Quantity</th>
+                        <th class="numeric">Calories</th>
+                        <th>Time Logged</th>
+                    </tr>
+                    </thead>
+                    <tbody>   
+                    <?php
+                        // Scan table and loop through rows to add to table
+                        $response = $dynamodb->scan([
+                            'TableName' => $tableName
+                        ]);
+                        
+                        foreach ($response['Items'] as $key => $value) {
+                            echo "\n";
+                            echo '<tr>';
+                            foreach ($value['Items']['M'] as $iKey => $iValue) {                                
+                                echo '    <td>' . $iKey . '</td>';
+                                echo '    <td class="numeric">' . $iValue['N'] . '</td>';
+                            }
+                            echo '    <td class="numeric">' . $value['Calories']['N'] . '</td>';
+                            echo '    <td>' . $value['TimeOfLog']['S'] . '</td>';
+                            echo '</tr>';
+                        }
+                    ?>
+                    </tbody>
+                </table>
+                </section>       
 
 		</section><! --/wrapper -->
       </section><!-- /MAIN CONTENT -->
