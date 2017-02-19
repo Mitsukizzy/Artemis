@@ -19,6 +19,8 @@ var handlers = {
         this.emit(':ask', 'Welcome to Artemis. How may I help you?');
     },
     'LogItemIntent': function () {
+                logAnywaysState = false;
+
         /*
         Intended to calculate the caloric count of an item, then add it as an item to our database
         */
@@ -220,6 +222,8 @@ var handlers = {
 
     },
     'LogMultipleItemsIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNum = parseInt(myIntent.slots.ItemNumber.value);
         var myItemName = myIntent.slots.ItemName.value;
@@ -476,7 +480,7 @@ var handlers = {
             var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars']);
             var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein']);
             var speechOutput = "On average, a " + myItemName + " has "
-            if (myNutrientType === 'carb') {
+            if (myNutrientType === 'carbs') {
                 speechOutput = speechOutput + myCarbs + " grams of carbohydrates per serving.";    
             }
             else if (myNutrientType === 'calories') {
@@ -558,6 +562,8 @@ var handlers = {
         });
     },
     'LogMultipleItemsAndMultipleItemsIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNumA = parseInt(myIntent.slots.ItemNumberA.value);
         var myItemNameA = myIntent.slots.ItemNameA.value;
@@ -831,6 +837,8 @@ var handlers = {
         });
     },
     'LogMultipleItemsAndSingleItemIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNumA = parseInt(myIntent.slots.ItemNumberA.value);
         var myItemNameA = myIntent.slots.ItemNameA.value;
@@ -1102,6 +1110,8 @@ var handlers = {
         });
     },
     'LogSingleItemAndMultipleItemsIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNumB = parseInt(myIntent.slots.ItemNumberB.value);
         var myItemNameA = myIntent.slots.ItemNameA.value;
@@ -1374,6 +1384,8 @@ var handlers = {
         });
     },
     'LogSingleItemAndSingleItemIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNumB = 1;
         var myItemNameA = myIntent.slots.ItemNameA.value;
@@ -1957,6 +1969,11 @@ var handlers = {
 
             })
             .catch((err) => console.log(err));   
+    },
+    'HealthyOptionIntent': function () {
+        logAnywaysState = false;
+        var speechOutput = 'Today\'s healthy suggestions are grilled chicken breast and kale.';
+        this.emit(':tell', speechOutput);
     }
 };
 
