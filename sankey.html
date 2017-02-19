@@ -174,9 +174,8 @@
             $.ajax({
                 url:'/php/sankey.php',
                 complete: function (response) {
-                    //$('#logTable').html( response.responseText );
                     console.log("success2", response.responseText);
-                    drawChart(response.responseText);
+                    google.setOnLoadCallback(drawChart(response.responseText));
                     setTimeout(refreshCharts, 7500);
                 },
                 error: function () {
