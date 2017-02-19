@@ -22,7 +22,32 @@
     <link href="assets/css/style-responsive.css" rel="stylesheet">
 
     <script src="assets/js/chart-master/Chart.js"></script>
-    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Water consumption in mL'],
+          ['2/18/2017',  100],
+          ['2/19/2017',  117],
+          ['2/20/2017',  160],
+          ['2/21/2017',  103]
+        ]);
+
+        var options = {
+          hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
+          vAxis: {minValue: 0},
+          fontName: 'Ruda',
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -95,8 +120,10 @@
       <!--Responsive Table-->
       <section id="main-content">
           <section class="wrapper">
-            
-          <h4><i class="fa fa-angle-right"></i>Recently Logged</h4>  
+          <div class="showback">
+          <h4><i class="fa fa-angle-right"></i>Water Consumption</h4> 
+          <div id="chart_div" style="width: 100%; height: 500px;"></div> 
+          </div>
 
 		</section><!--/wrapper -->
       </section><!-- /MAIN CONTENT -->
