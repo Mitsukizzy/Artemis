@@ -23,7 +23,6 @@ $marshaler = new Marshaler();
 
 $tableName = 'LoggedItems';
 unset($response); 
-
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +49,7 @@ unset($response);
     <link href="assets/css/style-responsive.css" rel="stylesheet">
 
     <script src="assets/js/chart-master/Chart.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
     
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -90,7 +90,7 @@ unset($response);
               <ul class="sidebar-menu" id="nav-accordion">
 
                   <li class="menu">
-                      <a href="index.php" >
+                      <a class="active" href="index.php" >
                           <i class="fa fa-desktop"></i>
                           <span>Dashboard</span>
                       </a>
@@ -101,8 +101,8 @@ unset($response);
                           <span>Charts</span>
                       </a>
                       <ul class="sub">
-                          <li><a class="active" href="blank.php">Blank Page</a></li>
-                          <li><a href="chartjs.html">Chartjs</a></li>
+                          <li><a  href="blank.php">Blank Page</a></li>
+                          <li><a  href="chartjs.html">Chartjs</a></li>
                       </ul>
                   </li>
 
@@ -119,41 +119,80 @@ unset($response);
       <!--Responsive Table-->
       <section id="main-content">
           <section class="wrapper">
-            
-          <h4><i class="fa fa-angle-right"></i>Recently Logged</h4>
-                <section id="unseen">
-                <table class="table table-bordered table-striped table-condensed">
-                    <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th class="numeric">Quantity</th>
-                        <th class="numeric">Calories</th>
-                        <th>Time Logged</th>
-                    </tr>
-                    </thead>
-                    <tbody>   
-                    <?php
-                        // Scan table and loop through rows to add to table
-                        $response = $dynamodb->scan([
-                            'TableName' => $tableName
-                        ]);
+            <div class="row mt">
+                <div class="col-lg-12">
+                    <div class="content-panel">
+                    <h4><i class="fa fa-angle-right"></i>Recently Logged</h4>
+                        <hr>
+                        <section id="unseen">
+                        <table class="table table-bordered table-striped table-advanced">
+                            <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th class="numeric">Quantity</th>
+                                <th class="numeric">Calories</th>
+                                <th>Time Logged</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>   
+                            <?php
+                                // Scan table and loop through rows to add to table
+                                $response = $dynamodb->scan([
+                                    'TableName' => $tableName
+                                ]);
+                                
+                                foreach ($response['Items'] as $key => $value) {
+                                    echo "\n";
+                                    echo '<tr>';
+                                    foreach ($value['Items']['M'] as $iKey => $iValue) {                                
+                                        echo '    <td>' . $iKey . '</td>';
+                                        echo '    <td class="numeric">' . $iValue['N'] . '</td>';
+                                    }
+                                    echo '    <td class="numeric">' . $value['Calories']['N'] . '</td>';
+                                    echo '    <td>' . $value['TimeOfLog']['S'] . '</td>';
+                                    echo '<td>
+                                            <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
+                                            <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
+                                          </td>';
+                                    echo '</tr>';
+                                }
+                            ?>  
+                            </tbody>
+                        </table>
+                        </section>
+                    </div><!-- /content-panel -->
+                </div><!-- /col-lg-4 -->			
+            </div><!-- /row -->            
 
-                        foreach ($response['Items'] as $key => $value) {
-                            echo "\n";
-                            echo '<tr>';
-                            foreach ($value['Items']['M'] as $iKey => $iValue) {                                
-                                echo '    <td>' . $iKey . '</td>';
-                                echo '    <td class="numeric">' . $iValue['N'] . '</td>';
-                            }
-                            echo '    <td class="numeric">' . $value['Calories']['N'] . '</td>';
-                            echo '    <td>' . $value['TimeOfLog']['S'] . '</td>';
-                            echo '</tr>';
-                        }
-                    ?>
-                    </tbody>
-                </table>
-                </section>       
-
+            <div class="row mt">
+      			<div class="col-lg-6 col-md-6 col-sm-12">
+      				<! -- BASIC PROGRESS BARS -->
+      				<div class="showback">
+      					<h4><i class="fa fa-angle-right"></i>Quick Goals</h4>
+	      				<div class="progress">
+						  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+						    <span class="sr-only">40% Complete (success)</span>
+						  </div>
+						</div>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+						    <span class="sr-only">20% Complete</span>
+						  </div>
+						</div>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+						    <span class="sr-only">60% Complete (warning)</span>
+						  </div>
+						</div>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+						    <span class="sr-only">80% Complete</span>
+						  </div>
+						</div>
+      				</div><!--/showback -->
+      			</div>
+            </div>
 		</section><! --/wrapper -->
       </section><!-- /MAIN CONTENT -->
                   
@@ -164,10 +203,10 @@ unset($response);
       <footer class="site-footer">
           <div class="text-center">
               Made @ TreeHacks 2017
-              <a href="blank.html#" class="go-top">
+              <a href="index.php#" class="go-top">
                   <i class="fa fa-angle-up"></i>
               </a>
-          </div>
+            </div>
       </footer>
       <!--footer end-->
 
@@ -226,6 +265,60 @@ unset($response);
         }
     </script>
   
+    <!-- AWS -->
+    <script>
+        var foodItems = [];
+        
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'https://dynamodb.us-east-1.amazonaws.com',
+            // accessKeyId default can be used while using the downloadable version of DynamoDB. 
+            // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
+            accessKeyId: "AKIAJKTVMITXX54WN63A",
+            // secretAccessKey default can be used while using the downloadable version of DynamoDB. 
+            // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
+            secretAccessKey: "JYmy09GkAXHBzQj9yub+XGRigSIpbTZ4LZtRTFu0"
+        });
+
+        var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+
+        function readItem() {
+            var table = 'LoggedItems';
+            var logTime = "myTimeStamp";
+
+            var itemParams = {
+                TableName: table,
+                Key: {
+                    TimeOfLog: logTime
+                }
+            };
+            docClient.get(itemParams, function(err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log('Added new item', data);
+                }
+            });
+        }
+
+        // Get all the timestamps and order it
+        var db = new AWS.DynamoDB.DocumentClient();
+        db.scan({
+            TableName: 'LoggedItems',
+            
+        }, (err, data) => {
+            if(err) console.error(err);
+            else {
+                foodItems = data.Items;
+                console.log('Scan success. Data: ', foodItems);
+            }
+        });
+
+        var db = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+        db.listTables(function(err, data) { 
+            console.log(data.TableNames);
+        });
+    </script>
 
   </body>
 </html>
