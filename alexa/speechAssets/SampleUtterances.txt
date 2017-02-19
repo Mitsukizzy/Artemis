@@ -2,8 +2,80 @@ LogItemIntent I ate {ItemName}
 LogItemIntent I ate a {ItemName}
 LogItemIntent I had a {ItemName}
 LogItemIntent I had {ItemName}
+LogItemIntent and I ate {ItemName}
+LogItemIntent oh and I ate {ItemName}
+LogItemIntent and I had {ItemName}
+LogItemIntent oh and I had {ItemName}
+LogItemIntent and I ate a {ItemName}
+LogItemIntent oh and I ate a {ItemName}
+LogItemIntent and I had a {ItemName}
+LogItemIntent oh and I had a {ItemName}
+LogItemIntent and I ate {ItemName} too
+LogItemIntent oh and I ate {ItemName} too
+LogItemIntent and I had {ItemName} too
+LogItemIntent oh and I had {ItemName} too
+LogItemIntent and I ate a {ItemName} too
+LogItemIntent oh and I ate a {ItemName} too
+LogItemIntent and I had a {ItemName} too
+LogItemIntent oh and I had a {ItemName} too
+LogItemIntent and I also ate {ItemName}
+LogItemIntent oh and I also ate {ItemName}
+LogItemIntent and I also had {ItemName}
+LogItemIntent oh and I also had {ItemName}
+LogItemIntent and I also ate a {ItemName}
+LogItemIntent oh and I also ate a {ItemName}
+LogItemIntent and I also had a {ItemName}
+LogItemIntent oh and I also had a {ItemName}
 
 LogMultipleItemsIntent I ate {ItemNumber} {ItemName}
+LogMultipleItemsIntent I had {ItemNumber} {ItemName}
+LogMultipleItemsIntent and I ate {ItemNumber} {ItemName}
+LogMultipleItemsIntent oh and I ate {ItemName}
+LogMultipleItemsIntent and I had {ItemNumber} {ItemName}
+LogMultipleItemsIntent oh and I had {ItemNumber} {ItemName}
+LogMultipleItemsIntent and I ate {ItemNumber} {ItemName} too
+LogMultipleItemsIntent oh and I ate {ItemNumber} {ItemName} too
+LogMultipleItemsIntent and I had {ItemNumber} {ItemName} too
+LogMultipleItemsIntent oh and I had {ItemNumber} {ItemName} too
+LogMultipleItemsIntent and I also ate {ItemNumber} {ItemName}
+LogMultipleItemsIntent oh and I also ate {ItemNumber} {ItemName}
+LogMultipleItemsIntent and I also had {ItemNumber} {ItemName}
+LogMultipleItemsIntent oh and I also had {ItemNumber} {ItemName}
 
-HowAmIDoingIntent How am I doing
+HowAmIDoingIntent how am I doing
+
+StopIntent no thank you
+StopIntent no
+StopIntent no thanks
+StopIntent nope
+StopIntent thanks Artemis
+
+SetCalorieGoalIntent set my goal to {ItemNumber} today
+SetCalorieGoalIntent set my goal to {ItemNumber}
+SetCalorieGoalIntent set the goal to {ItemNumber} today
+SetCalorieGoalIntent set the goal to {ItemNumber}
+SetCalorieGoalIntent set my calorie goal to {ItemNumber} today
+SetCalorieGoalIntent set my calorie goal to {ItemNumber}
+SetCalorieGoalIntent set the calorie goal to {ItemNumber} today
+SetCalorieGoalIntent set the calorie goal to {ItemNumber}
+SetCalorieGoalIntent set my goal to {ItemNumber} today
+SetCalorieGoalIntent set my goal to {ItemNumber} calories
+SetCalorieGoalIntent set the goal to {ItemNumber} calories today
+SetCalorieGoalIntent set the goal to {ItemNumber} calories
+SetCalorieGoalIntent set my calorie goal to {ItemNumber} calories today
+SetCalorieGoalIntent set my calorie goal to {ItemNumber} calories
+SetCalorieGoalIntent set the calorie goal to {ItemNumber} calories today
+SetCalorieGoalIntent set the calorie goal to {ItemNumber} calories
+
+GetItemInfoIntent what is the {NutrientType} count of {ItemName}
+GetItemInfoIntent how many {NutrientType} are in {ItemName}
+GetItemInfoIntent how much {NutrientType} is in {ItemName}
+GetItemInfoIntent how many {NutrientType} are in a {ItemName}
+GetItemInfoIntent how much {NutrientType} is in a {ItemName}
+GetItemInfoIntent how many {NutrientType} does {ItemName} have
+GetItemInfoIntent how much {NutrientType} does {ItemName} have
+GetItemInfoIntent how many {NutrientType} does a {ItemName} have
+GetItemInfoIntent how much {NutrientType} does a {ItemName} have
+
+
 
