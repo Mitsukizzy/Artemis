@@ -531,8 +531,1015 @@ var handlers = {
             var reprompt = 'Anything else?';
             this.emit(':ask', speechOutput, reprompt);
         });
-    }
+    },
+    'LogMultipleItemsAndMultipleItemsIntent': function () {
+        var myIntent = this.event.request.intent;
+        var myItemNumA = parseInt(myIntent.slots.ItemNumberA.value);
+        var myItemNameA = myIntent.slots.ItemNameA.value;
+        var myItemNumB = parseInt(myIntent.slots.ItemNumberB.value);
+        var myItemNameB = myIntent.slots.ItemNameB.value;
 
+        if (myIntent.slots.ItemNumberA.value == undefined || myIntent.slots.ItemNumberB.value == undefined || myItemNameB == undefined || myItemNameA == undefined) {
+            this.emit(':tell', 'I am sorry, I did not catch that');            
+        }
+/*
+        Intended to calculate the caloric count of an item, then add it as an item to our database
+        */
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            accessKeyId: 'AKIAJKTVMITXX54WN63A',
+            secretAccessKey: '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'
+        });
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        
+        request.get({
+            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemNameA,
+            qs: {
+                appId: '27d56daa',
+                appKey: '801497a4013af4e17085d5d46e305d0e',
+                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+            }
+        }, (err, response, body) => {
+            console.log('body', body);
+
+            if (response.status === 200) {
+                console.log("results error");
+            }
+
+            //var parsed = JSON.parse(response);
+            //console.log(parsed);
+            console.log(body);
+            console.log(response);
+            console.log(JSON.parse(body));
+            var parsed = JSON.parse(body);
+            console.log('hits',parsed.hits);
+            console.log('hits via bracket', parsed['hits']);
+            //console.log(body["total_hits"]);
+            //console.log('mah booty', body['hits'][0]);
+            console.log(parsed['hits'][0]['fields']);
+            //var myCalories = (int)parsed['hits'][0]['fields']['nf_calories'];
+            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories'])*myItemNumA;
+            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat'])*myItemNumA;
+            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate'])*myItemNumA;
+            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber'])*myItemNumA;
+            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars'])*myItemNumA;
+            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein'])*myItemNumA;
+
+            var d = new Date();
+            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+            var timestamp = new Date(utc + (3600000 * (-8)));
+            var logTime = "" + timestamp.getDate() + "/"
+                + (timestamp.getMonth()+1)  + "/" 
+                + timestamp.getFullYear() + " @ "  
+                + timestamp.getHours() + ":"  
+                + timestamp.getMinutes() + ":" 
+                + timestamp.getSeconds();
+            var table = 'LoggedItems';
+            console.log("passed another checkpoint");
+            var params = {
+                TableName: table,
+                Item: {
+                    TimeOfLog: logTime,
+                    Calories: myCalories,
+                    Fats: myFats,
+                    Carbs: myCarbs,
+                    Fiber: myFiber,
+                    Sugars: mySugars,
+                    Protein: myProtein,
+                    Items: {
+                        [myItemNameA]: myItemNumA
+                    }
+                }
+            };
+
+
+            docClient.put(params).promise().then((data) => {
+
+                var getParams = {
+                    TableName: "User",
+                    Key: {
+                        Id: 1
+                    }
+                };
+                docClient.get(getParams).promise().then((data) => {
+                    var oldCalories = data.Item.Calories;
+                    var newCalories = oldCalories + myCalories;
+
+                    var oldFats = data.Item.Fats;
+                    var newFats = oldFats + myFats;
+
+                    var oldCarbs = data.Item.Carbs;
+                    var newCarbs = oldCarbs + myCarbs;
+
+                    var oldFiber = data.Item.Fiber;
+                    var newFiber = oldFiber + myFiber;
+
+                    var oldSugars = data.Item.Sugars;
+                    var newSugars = oldSugars + mySugars;
+
+                    var oldProtein = data.Item.Protein;
+                    var newProtein = oldProtein + myProtein;
+
+                    var calorieGoal = data.Item.CalorieGoal;
+
+                    var updateParams = {
+                        TableName: 'User',
+                        Key: {
+                            Id: 1
+                        },
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        ExpressionAttributeValues: {
+                            ":c":newCalories,
+                            ":f":newFats,
+                            ":b":newCarbs,
+                            ":r":newFiber,
+                            ":s":newSugars,
+                            ":p":newProtein
+                        }
+                    };
+                    docClient.update(updateParams).promise().then((data) => {
+                        console.log("FINISHED FIRST SET OF ITEMS");
+                        /* !!!!!!!!! */
+                        request.get({
+                            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemNameB,
+                            qs: {
+                                appId: '27d56daa',
+                                appKey: '801497a4013af4e17085d5d46e305d0e',
+                                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+                            }
+                        }, (err, response, body) => {
+                            console.log('body', body);
+
+                            if (response.status === 200) {
+                                console.log("results error");
+                            }
+
+                            var parsed = JSON.parse(body);
+    
+                            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories'])*myItemNumB;
+                            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat'])*myItemNumB;
+                            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate'])*myItemNumB;
+                            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber'])*myItemNumB;
+                            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars'])*myItemNumB;
+                            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein'])*myItemNumB;
+
+                            var d = new Date();
+                            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+                            var timestamp = new Date(utc + (3600000 * (-8)));
+                            var logTime = "" + timestamp.getDate() + "/"
+                                + (timestamp.getMonth()+1)  + "/" 
+                                + timestamp.getFullYear() + " @ "  
+                                + timestamp.getHours() + ":"  
+                                + timestamp.getMinutes() + ":" 
+                                + timestamp.getSeconds();
+                            var table = 'LoggedItems';
+                            console.log("passed another checkpoint");
+                            var params = {
+                                TableName: table,
+                                Item: {
+                                    TimeOfLog: logTime,
+                                    Calories: myCalories,
+                                    Fats: myFats,
+                                    Carbs: myCarbs,
+                                    Fiber: myFiber,
+                                    Sugars: mySugars,
+                                    Protein: myProtein,
+                                    Items: {
+                                        [myItemNameB]: myItemNumB
+                                    }
+                                }
+                            };
+
+
+                            docClient.put(params).promise().then((data) => {
+
+                                var getParams = {
+                                    TableName: "User",
+                                    Key: {
+                                        Id: 1
+                                    }
+                                };
+                                docClient.get(getParams).promise().then((data) => {
+                                    var oldCalories = data.Item.Calories;
+                                    var newCalories = oldCalories + myCalories;
+
+                                    var oldFats = data.Item.Fats;
+                                    var newFats = oldFats + myFats;
+
+                                    var oldCarbs = data.Item.Carbs;
+                                    var newCarbs = oldCarbs + myCarbs;
+
+                                    var oldFiber = data.Item.Fiber;
+                                    var newFiber = oldFiber + myFiber;
+
+                                    var oldSugars = data.Item.Sugars;
+                                    var newSugars = oldSugars + mySugars;
+
+                                    var oldProtein = data.Item.Protein;
+                                    var newProtein = oldProtein + myProtein;
+
+                                    var calorieGoal = data.Item.CalorieGoal;
+
+                                    var updateParams = {
+                                        TableName: 'User',
+                                        Key: {
+                                            Id: 1
+                                        },
+                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                                        ExpressionAttributeValues: {
+                                            ":c":newCalories,
+                                            ":f":newFats,
+                                            ":b":newCarbs,
+                                            ":r":newFiber,
+                                            ":s":newSugars,
+                                            ":p":newProtein
+                                        }
+                                    };
+                                    docClient.update(updateParams).promise().then((data) => {
+                                        var speechOutput = 'Ok, I logged ' + myItemNumA + ' ' + myItemNameA
+                                            + ' and ' + myItemNumB + ' ' + myItemNameB + '. You are now '
+                                        var calorieDiff = calorieGoal - newCalories;
+                                        if (calorieDiff >= 0) {
+                                            speechOutput = speechOutput + calorieDiff + " calories under your goal today.";
+                                        } else {
+                                            speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
+                                        }
+                                        speechOutput += ' Anything else?';
+                                        var reprompt = 'Anything else?';
+                                        this.emit(':ask', speechOutput, reprompt);
+                                    })
+                                    .catch((err) => console.log(err));
+                                })
+                                .catch((err) => console.log(err));
+                            })
+                            .catch((err) => console.log(err));
+                        });
+                    })
+                    .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        });
+    },
+    'LogMultipleItemsAndSingleItemIntent': function () {
+        var myIntent = this.event.request.intent;
+        var myItemNumA = parseInt(myIntent.slots.ItemNumberA.value);
+        var myItemNameA = myIntent.slots.ItemNameA.value;
+        var myItemNumB = 1;
+        var myItemNameB = myIntent.slots.ItemNameB.value;
+
+        if (myIntent.slots.ItemNumberA.value == undefined || myItemNameB == undefined || myItemNameA == undefined) {
+            this.emit(':tell', 'I am sorry, I did not catch that');            
+        }
+/*
+        Intended to calculate the caloric count of an item, then add it as an item to our database
+        */
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            accessKeyId: 'AKIAJKTVMITXX54WN63A',
+            secretAccessKey: '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'
+        });
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        
+        request.get({
+            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemNameA,
+            qs: {
+                appId: '27d56daa',
+                appKey: '801497a4013af4e17085d5d46e305d0e',
+                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+            }
+        }, (err, response, body) => {
+            console.log('body', body);
+
+            if (response.status === 200) {
+                console.log("results error");
+            }
+
+            //var parsed = JSON.parse(response);
+            //console.log(parsed);
+            console.log(body);
+            console.log(response);
+            console.log(JSON.parse(body));
+            var parsed = JSON.parse(body);
+            console.log('hits',parsed.hits);
+            console.log('hits via bracket', parsed['hits']);
+            //console.log(body["total_hits"]);
+            //console.log('mah booty', body['hits'][0]);
+            console.log(parsed['hits'][0]['fields']);
+            //var myCalories = (int)parsed['hits'][0]['fields']['nf_calories'];
+            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories'])*myItemNumA;
+            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat'])*myItemNumA;
+            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate'])*myItemNumA;
+            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber'])*myItemNumA;
+            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars'])*myItemNumA;
+            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein'])*myItemNumA;
+
+            var d = new Date();
+            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+            var timestamp = new Date(utc + (3600000 * (-8)));
+            var logTime = "" + timestamp.getDate() + "/"
+                + (timestamp.getMonth()+1)  + "/" 
+                + timestamp.getFullYear() + " @ "  
+                + timestamp.getHours() + ":"  
+                + timestamp.getMinutes() + ":" 
+                + timestamp.getSeconds();
+            var table = 'LoggedItems';
+            console.log("passed another checkpoint");
+            var params = {
+                TableName: table,
+                Item: {
+                    TimeOfLog: logTime,
+                    Calories: myCalories,
+                    Fats: myFats,
+                    Carbs: myCarbs,
+                    Fiber: myFiber,
+                    Sugars: mySugars,
+                    Protein: myProtein,
+                    Items: {
+                        [myItemNameA]: myItemNumA
+                    }
+                }
+            };
+
+
+            docClient.put(params).promise().then((data) => {
+
+                var getParams = {
+                    TableName: "User",
+                    Key: {
+                        Id: 1
+                    }
+                };
+                docClient.get(getParams).promise().then((data) => {
+                    var oldCalories = data.Item.Calories;
+                    var newCalories = oldCalories + myCalories;
+
+                    var oldFats = data.Item.Fats;
+                    var newFats = oldFats + myFats;
+
+                    var oldCarbs = data.Item.Carbs;
+                    var newCarbs = oldCarbs + myCarbs;
+
+                    var oldFiber = data.Item.Fiber;
+                    var newFiber = oldFiber + myFiber;
+
+                    var oldSugars = data.Item.Sugars;
+                    var newSugars = oldSugars + mySugars;
+
+                    var oldProtein = data.Item.Protein;
+                    var newProtein = oldProtein + myProtein;
+
+                    var calorieGoal = data.Item.CalorieGoal;
+
+                    var updateParams = {
+                        TableName: 'User',
+                        Key: {
+                            Id: 1
+                        },
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        ExpressionAttributeValues: {
+                            ":c":newCalories,
+                            ":f":newFats,
+                            ":b":newCarbs,
+                            ":r":newFiber,
+                            ":s":newSugars,
+                            ":p":newProtein
+                        }
+                    };
+                    docClient.update(updateParams).promise().then((data) => {
+                        console.log("FINISHED FIRST SET OF ITEMS");
+                        /* !!!!!!!!! */
+                        request.get({
+                            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemNameB,
+                            qs: {
+                                appId: '27d56daa',
+                                appKey: '801497a4013af4e17085d5d46e305d0e',
+                                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+                            }
+                        }, (err, response, body) => {
+                            console.log('body', body);
+
+                            if (response.status === 200) {
+                                console.log("results error");
+                            }
+
+                            var parsed = JSON.parse(body);
+    
+                            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories'])*myItemNumB;
+                            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat'])*myItemNumB;
+                            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate'])*myItemNumB;
+                            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber'])*myItemNumB;
+                            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars'])*myItemNumB;
+                            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein'])*myItemNumB;
+
+                            var d = new Date();
+                            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+                            var timestamp = new Date(utc + (3600000 * (-8)));
+                            var logTime = "" + timestamp.getDate() + "/"
+                                + (timestamp.getMonth()+1)  + "/" 
+                                + timestamp.getFullYear() + " @ "  
+                                + timestamp.getHours() + ":"  
+                                + timestamp.getMinutes() + ":" 
+                                + timestamp.getSeconds();
+                            var table = 'LoggedItems';
+                            console.log("passed another checkpoint");
+                            var params = {
+                                TableName: table,
+                                Item: {
+                                    TimeOfLog: logTime,
+                                    Calories: myCalories,
+                                    Fats: myFats,
+                                    Carbs: myCarbs,
+                                    Fiber: myFiber,
+                                    Sugars: mySugars,
+                                    Protein: myProtein,
+                                    Items: {
+                                        [myItemNameB]: myItemNumB
+                                    }
+                                }
+                            };
+
+
+                            docClient.put(params).promise().then((data) => {
+
+                                var getParams = {
+                                    TableName: "User",
+                                    Key: {
+                                        Id: 1
+                                    }
+                                };
+                                docClient.get(getParams).promise().then((data) => {
+                                    var oldCalories = data.Item.Calories;
+                                    var newCalories = oldCalories + myCalories;
+
+                                    var oldFats = data.Item.Fats;
+                                    var newFats = oldFats + myFats;
+
+                                    var oldCarbs = data.Item.Carbs;
+                                    var newCarbs = oldCarbs + myCarbs;
+
+                                    var oldFiber = data.Item.Fiber;
+                                    var newFiber = oldFiber + myFiber;
+
+                                    var oldSugars = data.Item.Sugars;
+                                    var newSugars = oldSugars + mySugars;
+
+                                    var oldProtein = data.Item.Protein;
+                                    var newProtein = oldProtein + myProtein;
+
+                                    var calorieGoal = data.Item.CalorieGoal;
+
+                                    var updateParams = {
+                                        TableName: 'User',
+                                        Key: {
+                                            Id: 1
+                                        },
+                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                                        ExpressionAttributeValues: {
+                                            ":c":newCalories,
+                                            ":f":newFats,
+                                            ":b":newCarbs,
+                                            ":r":newFiber,
+                                            ":s":newSugars,
+                                            ":p":newProtein
+                                        }
+                                    };
+                                    docClient.update(updateParams).promise().then((data) => {
+                                        var speechOutput = 'Ok, I logged ' + myItemNumA + ' ' + myItemNameA
+                                            + ' and ' + myItemNumB + ' ' + myItemNameB + '. You are now '
+                                        var calorieDiff = calorieGoal - newCalories;
+                                        if (calorieDiff >= 0) {
+                                            speechOutput = speechOutput + calorieDiff + " calories under your goal today.";
+                                        } else {
+                                            speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
+                                        }
+                                        speechOutput += ' Anything else?';
+                                        var reprompt = 'Anything else?';
+                                        this.emit(':ask', speechOutput, reprompt);
+                                    })
+                                    .catch((err) => console.log(err));
+                                })
+                                .catch((err) => console.log(err));
+                            })
+                            .catch((err) => console.log(err));
+                        });
+                    })
+                    .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        });
+    },
+    'LogSingleItemAndMultipleItemsIntent': function () {
+        var myIntent = this.event.request.intent;
+        var myItemNumB = parseInt(myIntent.slots.ItemNumberB.value);
+        var myItemNameA = myIntent.slots.ItemNameA.value;
+        var myItemNumA = 1;
+        var myItemNameB = myIntent.slots.ItemNameB.value;
+
+        if (myIntent.slots.ItemNumberB.value == undefined || myItemNameB == undefined || myItemNameA == undefined) {
+            this.emit(':tell', 'I am sorry, I did not catch that');            
+        }
+/*
+        Intended to calculate the caloric count of an item, then add it as an item to our database
+        */
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            accessKeyId: 'AKIAJKTVMITXX54WN63A',
+            secretAccessKey: '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'
+        });
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        
+        request.get({
+            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemNameA,
+            qs: {
+                appId: '27d56daa',
+                appKey: '801497a4013af4e17085d5d46e305d0e',
+                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+            }
+        }, (err, response, body) => {
+            console.log('body', body);
+
+            if (response.status === 200) {
+                console.log("results error");
+            }
+
+            //var parsed = JSON.parse(response);
+            //console.log(parsed);
+            console.log(body);
+            console.log(response);
+            console.log(JSON.parse(body));
+            var parsed = JSON.parse(body);
+            console.log('hits',parsed.hits);
+            console.log('hits via bracket', parsed['hits']);
+            //console.log(body["total_hits"]);
+            //console.log('mah booty', body['hits'][0]);
+            console.log(parsed['hits'][0]['fields']);
+            //var myCalories = (int)parsed['hits'][0]['fields']['nf_calories'];
+            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories'])*myItemNumA;
+            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat'])*myItemNumA;
+            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate'])*myItemNumA;
+            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber'])*myItemNumA;
+            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars'])*myItemNumA;
+            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein'])*myItemNumA;
+
+            var d = new Date();
+            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+            var timestamp = new Date(utc + (3600000 * (-8)));
+            var logTime = "" + timestamp.getDate() + "/"
+                + (timestamp.getMonth()+1)  + "/" 
+                + timestamp.getFullYear() + " @ "  
+                + timestamp.getHours() + ":"  
+                + timestamp.getMinutes() + ":" 
+                + timestamp.getSeconds();
+            var table = 'LoggedItems';
+            console.log("passed another checkpoint");
+            var params = {
+                TableName: table,
+                Item: {
+                    TimeOfLog: logTime,
+                    Calories: myCalories,
+                    Fats: myFats,
+                    Carbs: myCarbs,
+                    Fiber: myFiber,
+                    Sugars: mySugars,
+                    Protein: myProtein,
+                    Items: {
+                        [myItemNameA]: myItemNumA
+                    }
+                }
+            };
+
+
+            docClient.put(params).promise().then((data) => {
+
+                var getParams = {
+                    TableName: "User",
+                    Key: {
+                        Id: 1
+                    }
+                };
+                docClient.get(getParams).promise().then((data) => {
+                    var oldCalories = data.Item.Calories;
+                    var newCalories = oldCalories + myCalories;
+
+                    var oldFats = data.Item.Fats;
+                    var newFats = oldFats + myFats;
+
+                    var oldCarbs = data.Item.Carbs;
+                    var newCarbs = oldCarbs + myCarbs;
+
+                    var oldFiber = data.Item.Fiber;
+                    var newFiber = oldFiber + myFiber;
+
+                    var oldSugars = data.Item.Sugars;
+                    var newSugars = oldSugars + mySugars;
+
+                    var oldProtein = data.Item.Protein;
+                    var newProtein = oldProtein + myProtein;
+
+                    var calorieGoal = data.Item.CalorieGoal;
+
+                    var updateParams = {
+                        TableName: 'User',
+                        Key: {
+                            Id: 1
+                        },
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        ExpressionAttributeValues: {
+                            ":c":newCalories,
+                            ":f":newFats,
+                            ":b":newCarbs,
+                            ":r":newFiber,
+                            ":s":newSugars,
+                            ":p":newProtein
+                        }
+                    };
+                    docClient.update(updateParams).promise().then((data) => {
+                        console.log("FINISHED FIRST SET OF ITEMS");
+                        /* !!!!!!!!! */
+                        request.get({
+                            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemNameB,
+                            qs: {
+                                appId: '27d56daa',
+                                appKey: '801497a4013af4e17085d5d46e305d0e',
+                                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+                            }
+                        }, (err, response, body) => {
+                            console.log('body', body);
+
+                            if (response.status === 200) {
+                                console.log("results error");
+                            }
+
+                            var parsed = JSON.parse(body);
+    
+                            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories'])*myItemNumB;
+                            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat'])*myItemNumB;
+                            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate'])*myItemNumB;
+                            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber'])*myItemNumB;
+                            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars'])*myItemNumB;
+                            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein'])*myItemNumB;
+
+                            var d = new Date();
+                            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+                            var timestamp = new Date(utc + (3600000 * (-8)));
+                            var logTime = "" + timestamp.getDate() + "/"
+                                + (timestamp.getMonth()+1)  + "/" 
+                                + timestamp.getFullYear() + " @ "  
+                                + timestamp.getHours() + ":"  
+                                + timestamp.getMinutes() + ":" 
+                                + timestamp.getSeconds();
+                            var table = 'LoggedItems';
+                            console.log("passed another checkpoint");
+                            var params = {
+                                TableName: table,
+                                Item: {
+                                    TimeOfLog: logTime,
+                                    Calories: myCalories,
+                                    Fats: myFats,
+                                    Carbs: myCarbs,
+                                    Fiber: myFiber,
+                                    Sugars: mySugars,
+                                    Protein: myProtein,
+                                    Items: {
+                                        [myItemNameB]: myItemNumB
+                                    }
+                                }
+                            };
+
+
+                            docClient.put(params).promise().then((data) => {
+
+                                var getParams = {
+                                    TableName: "User",
+                                    Key: {
+                                        Id: 1
+                                    }
+                                };
+                                docClient.get(getParams).promise().then((data) => {
+                                    var oldCalories = data.Item.Calories;
+                                    var newCalories = oldCalories + myCalories;
+
+                                    var oldFats = data.Item.Fats;
+                                    var newFats = oldFats + myFats;
+
+                                    var oldCarbs = data.Item.Carbs;
+                                    var newCarbs = oldCarbs + myCarbs;
+
+                                    var oldFiber = data.Item.Fiber;
+                                    var newFiber = oldFiber + myFiber;
+
+                                    var oldSugars = data.Item.Sugars;
+                                    var newSugars = oldSugars + mySugars;
+
+                                    var oldProtein = data.Item.Protein;
+                                    var newProtein = oldProtein + myProtein;
+
+                                    var calorieGoal = data.Item.CalorieGoal;
+
+                                    var updateParams = {
+                                        TableName: 'User',
+                                        Key: {
+                                            Id: 1
+                                        },
+                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                                        ExpressionAttributeValues: {
+                                            ":c":newCalories,
+                                            ":f":newFats,
+                                            ":b":newCarbs,
+                                            ":r":newFiber,
+                                            ":s":newSugars,
+                                            ":p":newProtein
+                                        }
+                                    };
+                                    docClient.update(updateParams).promise().then((data) => {
+                                        var speechOutput = 'Ok, I logged ' + myItemNumA + ' ' + myItemNameA
+                                            + ' and ' + myItemNumB + ' ' + myItemNameB + '. You are now '
+                                        var calorieDiff = calorieGoal - newCalories;
+                                        if (calorieDiff >= 0) {
+                                            speechOutput = speechOutput + calorieDiff + " calories under your goal today.";
+                                        } else {
+                                            speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
+                                        }
+                                        speechOutput += ' Anything else?';
+                                        var reprompt = 'Anything else?';
+                                        this.emit(':ask', speechOutput, reprompt);
+                                    })
+                                    .catch((err) => console.log(err));
+                                })
+                                .catch((err) => console.log(err));
+                            })
+                            .catch((err) => console.log(err));
+                        });
+                    })
+                    .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        });
+    },
+    'LogSingleItemAndSingleItemIntent': function () {
+        var myIntent = this.event.request.intent;
+        var myItemNumB = 1;
+        var myItemNameA = myIntent.slots.ItemNameA.value;
+        var myItemNumA = 1;
+        var myItemNameB = myIntent.slots.ItemNameB.value;
+
+        if (myItemNameB == undefined || myItemNameA == undefined) {
+            this.emit(':tell', 'I am sorry, I did not catch that');            
+        }
+/*
+        Intended to calculate the caloric count of an item, then add it as an item to our database
+        */
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            accessKeyId: 'AKIAJKTVMITXX54WN63A',
+            secretAccessKey: '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'
+        });
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        
+        request.get({
+            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemNameA,
+            qs: {
+                appId: '27d56daa',
+                appKey: '801497a4013af4e17085d5d46e305d0e',
+                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+            }
+        }, (err, response, body) => {
+            console.log('body', body);
+
+            if (response.status === 200) {
+                console.log("results error");
+            }
+
+            //var parsed = JSON.parse(response);
+            //console.log(parsed);
+            console.log(body);
+            console.log(response);
+            console.log(JSON.parse(body));
+            var parsed = JSON.parse(body);
+            console.log('hits',parsed.hits);
+            console.log('hits via bracket', parsed['hits']);
+            //console.log(body["total_hits"]);
+            //console.log('mah booty', body['hits'][0]);
+            console.log(parsed['hits'][0]['fields']);
+            //var myCalories = (int)parsed['hits'][0]['fields']['nf_calories'];
+            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories'])*myItemNumA;
+            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat'])*myItemNumA;
+            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate'])*myItemNumA;
+            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber'])*myItemNumA;
+            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars'])*myItemNumA;
+            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein'])*myItemNumA;
+
+            var d = new Date();
+            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+            var timestamp = new Date(utc + (3600000 * (-8)));
+            var logTime = "" + timestamp.getDate() + "/"
+                + (timestamp.getMonth()+1)  + "/" 
+                + timestamp.getFullYear() + " @ "  
+                + timestamp.getHours() + ":"  
+                + timestamp.getMinutes() + ":" 
+                + timestamp.getSeconds();
+            var table = 'LoggedItems';
+            console.log("passed another checkpoint");
+            var params = {
+                TableName: table,
+                Item: {
+                    TimeOfLog: logTime,
+                    Calories: myCalories,
+                    Fats: myFats,
+                    Carbs: myCarbs,
+                    Fiber: myFiber,
+                    Sugars: mySugars,
+                    Protein: myProtein,
+                    Items: {
+                        [myItemNameA]: myItemNumA
+                    }
+                }
+            };
+
+
+            docClient.put(params).promise().then((data) => {
+
+                var getParams = {
+                    TableName: "User",
+                    Key: {
+                        Id: 1
+                    }
+                };
+                docClient.get(getParams).promise().then((data) => {
+                    var oldCalories = data.Item.Calories;
+                    var newCalories = oldCalories + myCalories;
+
+                    var oldFats = data.Item.Fats;
+                    var newFats = oldFats + myFats;
+
+                    var oldCarbs = data.Item.Carbs;
+                    var newCarbs = oldCarbs + myCarbs;
+
+                    var oldFiber = data.Item.Fiber;
+                    var newFiber = oldFiber + myFiber;
+
+                    var oldSugars = data.Item.Sugars;
+                    var newSugars = oldSugars + mySugars;
+
+                    var oldProtein = data.Item.Protein;
+                    var newProtein = oldProtein + myProtein;
+
+                    var calorieGoal = data.Item.CalorieGoal;
+
+                    var updateParams = {
+                        TableName: 'User',
+                        Key: {
+                            Id: 1
+                        },
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        ExpressionAttributeValues: {
+                            ":c":newCalories,
+                            ":f":newFats,
+                            ":b":newCarbs,
+                            ":r":newFiber,
+                            ":s":newSugars,
+                            ":p":newProtein
+                        }
+                    };
+                    docClient.update(updateParams).promise().then((data) => {
+                        console.log("FINISHED FIRST SET OF ITEMS");
+                        /* !!!!!!!!! */
+                        request.get({
+                            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemNameB,
+                            qs: {
+                                appId: '27d56daa',
+                                appKey: '801497a4013af4e17085d5d46e305d0e',
+                                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+                            }
+                        }, (err, response, body) => {
+                            console.log('body', body);
+
+                            if (response.status === 200) {
+                                console.log("results error");
+                            }
+
+                            var parsed = JSON.parse(body);
+    
+                            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories'])*myItemNumB;
+                            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat'])*myItemNumB;
+                            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate'])*myItemNumB;
+                            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber'])*myItemNumB;
+                            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars'])*myItemNumB;
+                            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein'])*myItemNumB;
+
+                            var d = new Date();
+                            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+                            var timestamp = new Date(utc + (3600000 * (-8)));
+                            var logTime = "" + timestamp.getDate() + "/"
+                                + (timestamp.getMonth()+1)  + "/" 
+                                + timestamp.getFullYear() + " @ "  
+                                + timestamp.getHours() + ":"  
+                                + timestamp.getMinutes() + ":" 
+                                + timestamp.getSeconds();
+                            var table = 'LoggedItems';
+                            console.log("passed another checkpoint");
+                            var params = {
+                                TableName: table,
+                                Item: {
+                                    TimeOfLog: logTime,
+                                    Calories: myCalories,
+                                    Fats: myFats,
+                                    Carbs: myCarbs,
+                                    Fiber: myFiber,
+                                    Sugars: mySugars,
+                                    Protein: myProtein,
+                                    Items: {
+                                        [myItemNameB]: myItemNumB
+                                    }
+                                }
+                            };
+
+
+                            docClient.put(params).promise().then((data) => {
+
+                                var getParams = {
+                                    TableName: "User",
+                                    Key: {
+                                        Id: 1
+                                    }
+                                };
+                                docClient.get(getParams).promise().then((data) => {
+                                    var oldCalories = data.Item.Calories;
+                                    var newCalories = oldCalories + myCalories;
+
+                                    var oldFats = data.Item.Fats;
+                                    var newFats = oldFats + myFats;
+
+                                    var oldCarbs = data.Item.Carbs;
+                                    var newCarbs = oldCarbs + myCarbs;
+
+                                    var oldFiber = data.Item.Fiber;
+                                    var newFiber = oldFiber + myFiber;
+
+                                    var oldSugars = data.Item.Sugars;
+                                    var newSugars = oldSugars + mySugars;
+
+                                    var oldProtein = data.Item.Protein;
+                                    var newProtein = oldProtein + myProtein;
+
+                                    var calorieGoal = data.Item.CalorieGoal;
+
+                                    var updateParams = {
+                                        TableName: 'User',
+                                        Key: {
+                                            Id: 1
+                                        },
+                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                                        ExpressionAttributeValues: {
+                                            ":c":newCalories,
+                                            ":f":newFats,
+                                            ":b":newCarbs,
+                                            ":r":newFiber,
+                                            ":s":newSugars,
+                                            ":p":newProtein
+                                        }
+                                    };
+                                    docClient.update(updateParams).promise().then((data) => {
+                                        var speechOutput = 'Ok, I logged ' + myItemNumA + ' ' + myItemNameA
+                                            + ' and ' + myItemNumB + ' ' + myItemNameB + '. You are now '
+                                        var calorieDiff = calorieGoal - newCalories;
+                                        if (calorieDiff >= 0) {
+                                            speechOutput = speechOutput + calorieDiff + " calories under your goal today.";
+                                        } else {
+                                            speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
+                                        }
+                                        speechOutput += ' Anything else?';
+                                        var reprompt = 'Anything else?';
+                                        this.emit(':ask', speechOutput, reprompt);
+                                    })
+                                    .catch((err) => console.log(err));
+                                })
+                                .catch((err) => console.log(err));
+                            })
+                            .catch((err) => console.log(err));
+                        });
+                    })
+                    .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        });
+    }        
 };
 
 

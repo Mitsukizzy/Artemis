@@ -42,6 +42,24 @@ LogMultipleItemsIntent oh and I also ate {ItemNumber} {ItemName}
 LogMultipleItemsIntent and I also had {ItemNumber} {ItemName}
 LogMultipleItemsIntent oh and I also had {ItemNumber} {ItemName}
 
+LogMultipleItemsAndMultipleItemsIntent I ate {ItemNumberA} {ItemNameA} and {ItemNumberB} {ItemNameB}
+
+LogMultipleItemsAndSingleItemIntent I ate {ItemNumberA} {ItemNameA} and a {ItemNameB}
+LogMultipleItemsAndSingleItemIntent I ate {ItemNumberA} {ItemNameA} and {ItemNameB}
+LogMultipleItemsAndSingleItemIntent I ate {ItemNumberA} {ItemNameA} and an {ItemNameB}
+
+LogSingleItemAndMultipleItemsIntent I ate {ItemNameA} and {ItemNumberB} {ItemNameB}
+LogSingleItemAndMultipleItemsIntent I ate a {ItemNameA} and {ItemNumberB} {ItemNameB}
+LogSingleItemAndMultipleItemsIntent I ate an {ItemNameA} and {ItemNumberB} {ItemNameB}
+
+LogSingleItemAndSingleItemIntent I ate {ItemNameA} and {ItemNameB}
+LogSingleItemAndSingleItemIntent I ate a {ItemNameA} and {ItemNameB}
+LogSingleItemAndSingleItemIntent I ate {ItemNameA} and a {ItemNameB}
+LogSingleItemAndSingleItemIntent I ate a {ItemNameA} and a {ItemNameB}
+LogSingleItemAndSingleItemIntent I ate an {ItemNameA} and {ItemNameB}
+LogSingleItemAndSingleItemIntent I ate {ItemNameA} and an {ItemNameB}
+LogSingleItemAndSingleItemIntent I ate an {ItemNameA} and an {ItemNameB}
+
 HowAmIDoingIntent how am I doing
 
 StopIntent no thank you

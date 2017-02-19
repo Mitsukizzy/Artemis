@@ -67,6 +67,74 @@
       ]
     },
     {
+      "intent": "LogMultipleItemsAndMultipleItemsIntent",
+      "slots": [
+        {
+          "name": "ItemNumberA",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "ItemNameA",
+          "type": "LIST_OF_ITEM_NAMES"
+        },
+        {
+          "name": "ItemNumberB",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "ItemNameB",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    },
+    {
+      "intent": "LogMultipleItemsAndSingleItemIntent",
+      "slots": [
+        {
+          "name": "ItemNumberA",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "ItemNameA",
+          "type": "LIST_OF_ITEM_NAMES"
+        },
+        {
+          "name": "ItemNameB",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    },
+    {
+      "intent": "LogSingleItemAndMultipleItemsIntent",
+      "slots": [
+        {
+          "name": "ItemNameA",
+          "type": "LIST_OF_ITEM_NAMES"
+        },
+        {
+          "name": "ItemNumberB",
+          "type": "AMAZON.NUMBER"
+        },        
+        {
+          "name": "ItemNameB",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    }, 
+    {
+      "intent": "LogSingleItemAndSingleItemIntent",
+      "slots": [
+        {
+          "name": "ItemNameA",
+          "type": "LIST_OF_ITEM_NAMES"
+        },       
+        {
+          "name": "ItemNameB",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    },    
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {
