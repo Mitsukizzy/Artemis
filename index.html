@@ -1,32 +1,3 @@
-
-<?php
-  ini_set('display_errors', 1);
-  require '/home/isaben1/php/aws/aws-autoloader.php';
-
-  date_default_timezone_set('UTC');
-
-  use Aws\DynamoDb\Exception\DynamoDbException;
-  use Aws\DynamoDb\Marshaler;
-
-  $sdk = new Aws\Sdk([
-      'region'   => 'us-east-1',
-      'version'  => 'latest',
-      'endpoint' => 'https://dynamodb.us-east-1.amazonaws.com',
-      'credentials' => [
-          'key'    => 'AKIAJKTVMITXX54WN63A',
-          'secret' => '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'
-      ]
-  ]);
-
-
-  $dynamodb = $sdk->createDynamoDb();
-  $marshaler = new Marshaler();
-
-  $tableName = 'LoggedItems';
-  unset($response); 
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -99,7 +70,7 @@
                   <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
               </div>
             <!--logo start-->
-            <a href="index.php" class="logo"><b>ARTEMIS</b></a>
+            <a href="index.html" class="logo"><b>ARTEMIS</b></a>
             <!--logo end--> 
             <div class="top-menu">
             	<ul class="nav pull-right top-menu">
@@ -119,7 +90,7 @@
               <ul class="sidebar-menu" id="nav-accordion">
 
                   <li class="menu">
-                      <a class="active" href="index.php" >
+                      <a class="active" href="index.html" >
                           <i class="fa fa-desktop"></i>
                           <span>Dashboard</span>
                       </a>
@@ -164,29 +135,8 @@
                                 <th>Actions</th>
                             </tr>
                             </thead>
-                            <tbody>   
-                            <?php
-                                Scan table and loop through rows to add to table
-                                $response = $dynamodb->scan([
-                                    'TableName' => $tableName
-                                ]);
-                                
-                                foreach ($response['Items'] as $key => $value) {
-                                    echo "\n";
-                                    echo '<tr>';
-                                    foreach ($value['Items']['M'] as $iKey => $iValue) {                                
-                                        echo '    <td>' . $iKey . '</td>';
-                                        echo '    <td class="numeric">' . $iValue['N'] . '</td>';
-                                    }
-                                    echo '    <td class="numeric">' . $value['Calories']['N'] . '</td>';
-                                    echo '    <td>' . $value['TimeOfLog']['S'] . '</td>';
-                                    echo '<td>
-                                            <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
-                                            <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
-                                          </td>';
-                                    echo '</tr>';
-                                }
-                            ?>  
+                            <tbody id="logTable">
+
                             </tbody>
                         </table>
                         </section>
@@ -244,7 +194,7 @@
       <footer class="site-footer">
           <div class="text-center">
               Made @ TreeHacks 2017
-              <a href="index.php#" class="go-top">
+              <a href="index.html#" class="go-top">
                   <i class="fa fa-angle-up"></i>
               </a>
             </div>
@@ -308,6 +258,24 @@
     </script>
   
     <!-- AWS -->
+    <script type="text/javascript">
+         function refreshTable() {
+            $.ajax({
+                url:'queries.php',
+                complete: function (response) {
+                    $('#logTable').html( response.responseText );
+                    setTimeout(refreshTable, 7500);
+                },
+                error: function () {
+                    $('#logTable').html('An error has occured!');
+                    setTimeout(refreshTable, 7500);
+                }
+            });
+            return false;
+        }
+        refreshTable();
+    </script>
+
     <script>
         var foodItems = [];
         

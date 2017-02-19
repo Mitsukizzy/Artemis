@@ -39,6 +39,10 @@ foreach ($response['Items'] as $key => $value) {
     }
     echo '    <td class="numeric">' . $value['Calories']['N'] . '</td>';
     echo '    <td>' . $value['TimeOfLog']['S'] . '</td>';
+    echo '<td>
+              <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
+          </td>';
     echo '</tr>';
 } 
 

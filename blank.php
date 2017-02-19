@@ -42,7 +42,7 @@
                   <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
               </div>
             <!--logo start-->
-            <a href="index.php" class="logo"><b>ARTEMIS</b></a>
+            <a href="index.html" class="logo"><b>ARTEMIS</b></a>
             <!--logo end--> 
             <div class="top-menu">
             	<ul class="nav pull-right top-menu">
@@ -62,7 +62,7 @@
               <ul class="sidebar-menu" id="nav-accordion">
 
                   <li class="menu">
-                      <a href="index.php" >
+                      <a href="index.html" >
                           <i class="fa fa-desktop"></i>
                           <span>Dashboard</span>
                       </a>
@@ -143,7 +143,6 @@
     <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
 
     <!--script for this page-->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script type="text/javascript">
          function refreshTable() {
             $.ajax({
