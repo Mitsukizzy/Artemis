@@ -42,15 +42,15 @@
         data.addColumn('number', 'Sugars');
         data.addColumn('number', 'Protein');
         data.addColumn('number', 'Fats');
-
-        data.addRows([].concat(breakdown));
+        var arr = JSON.parse(breakdown);
+        data.addRows(arr);
         var options = {
           chart: {
             title: 'Carbohydrates, Fiber, Sugar, Protein, and Fats',
             subtitle: 'by day (grams)'
           },
-          width: 900,
-          height: 500,
+          width: 1000,
+          height: 700,
           animation:{
             startup: true,
             duration: 1000,
@@ -115,7 +115,6 @@
                           <li><a href="sankey.html">Item Percentage</a></li>
                           <li><a href="water_log.html">Water Log</a></li>
                           <li><a href="caloric_variance.html">Caloric Variance</a></li>
-                          <li><a href="chartjs.html">Chartjs</a></li>
                       </ul>
                   </li>
 
@@ -134,7 +133,7 @@
           <section class="wrapper">
           <div class="showback">
           <h4><i class="fa fa-angle-right"></i>Categorical Breakdown</h4>
-          <div id="linechart_material" style="width: 900px; height: 500px; padding: 10px;"></div>     
+          <div id="linechart_material" style="width: 1000px; height: 700px; padding: 10px;"></div>     
           </div>   
 
 		</section><!--/wrapper -->
@@ -175,9 +174,8 @@
             $.ajax({
                 url:'/php/daily_breakdown.php',
                 complete: function (response) {
-                    console.log("success2", typeof response.responseText);
-                    google.charts.setOnLoadCallback(drawChart(response.responseText));
-
+                    drawChart(response.responseText);
+                    setTimeout(refreshCharts, 7500);
                 },
                 error: function () {
                     //$('#logTable').html('An error has occured!');
@@ -186,7 +184,10 @@
             });
             return false;
         }
-        refreshCharts();
+
+        $( document ).ready(function() {
+            refreshCharts();
+        });
     </script>
 
   </body>
