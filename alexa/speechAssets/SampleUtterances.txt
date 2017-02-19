@@ -2,8 +2,37 @@ LogItemIntent I ate {ItemName}
 LogItemIntent I ate a {ItemName}
 LogItemIntent I had a {ItemName}
 LogItemIntent I had {ItemName}
+LogItemIntent and I ate {ItemName}
+LogItemIntent oh and I ate {ItemName}
+LogItemIntent and I had {ItemName}
+LogItemIntent oh and I had {ItemName}
+LogItemIntent and I ate a {ItemName}
+LogItemIntent oh and I ate a {ItemName}
+LogItemIntent and I had a {ItemName}
+LogItemIntent oh and I had a {ItemName}
+LogItemIntent and I ate {ItemName} too
+LogItemIntent oh and I ate {ItemName} too
+LogItemIntent and I had {ItemName} too
+LogItemIntent oh and I had {ItemName} too
+LogItemIntent and I ate a {ItemName} too
+LogItemIntent oh and I ate a {ItemName} too
+LogItemIntent and I had a {ItemName} too
+LogItemIntent oh and I had a {ItemName} too
+LogItemIntent and I also ate {ItemName}
+LogItemIntent oh and I also ate {ItemName}
+LogItemIntent and I also had {ItemName}
+LogItemIntent oh and I also had {ItemName}
+LogItemIntent and I also ate a {ItemName}
+LogItemIntent oh and I also ate a {ItemName}
+LogItemIntent and I also had a {ItemName}
+LogItemIntent oh and I also had a {ItemName}
 
 LogMultipleItemsIntent I ate {ItemNumber} {ItemName}
 
 HowAmIDoingIntent How am I doing
 
+StopIntent No thank you
+StopIntent No
+StopIntent No thanks
+StopIntent Nope
+StopIntent Thanks Artemis

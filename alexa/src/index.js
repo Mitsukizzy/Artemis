@@ -14,7 +14,7 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
-        this.emit(':tell', 'Launching');
+        this.emit(':ask', 'Welcome to Artemis. How may I help you?');
     },
     'LogItemIntent': function () {
         /*
@@ -31,6 +31,10 @@ var handlers = {
 
         var myIntent = this.event.request.intent;
         var myItemName = myIntent.slots.ItemName.value;
+
+        if (myItemName == undefined) {
+            this.emit(':tell', 'I am sorry, I do not know what that is');
+        }
 
     /*
         const promise = new Promise((resolve, reject) => {
@@ -82,7 +86,7 @@ var handlers = {
             qs: {
                 appId: '27d56daa',
                 appKey: '801497a4013af4e17085d5d46e305d0e',
-                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat'
+                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
             }
         }, (err, response, body) => {
             console.log('body', body);
@@ -104,20 +108,37 @@ var handlers = {
             console.log(parsed['hits'][0]['fields']);
             //var myCalories = (int)parsed['hits'][0]['fields']['nf_calories'];
             var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories']);
+            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat']);
+            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate']);
+            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber']);
+            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars']);
+            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein']);
+
             var timestamp = new Date();
+            var logTime = "" + timestamp.getDate() + "/"
+                + (timestamp.getMonth()+1)  + "/" 
+                + timestamp.getFullYear() + " @ "  
+                + timestamp.getHours() + ":"  
+                + timestamp.getMinutes() + ":" 
+                + timestamp.getSeconds();
             var table = 'LoggedItems';
+            console.log("passed another checkpoint");
             var params = {
                 TableName: table,
                 Item: {
-                    TimeOfLog: timestamp.toString(),
+                    TimeOfLog: logTime,
                     Calories: myCalories,
+                    Fats: myFats,
+                    Carbs: myCarbs,
+                    Fiber: myFiber,
+                    Sugars: mySugars,
+                    Protein: myProtein,
                     Items: {
                         [myItemName]: 1
                     }
                 }
             };
 
-            var speechOutput = 'I invoked the LogItemIntent';
 
             docClient.put(params).promise().then((data) => {
 
@@ -131,18 +152,40 @@ var handlers = {
                     var oldCalories = data.Item.Calories;
                     var newCalories = oldCalories + myCalories;
 
+                    var oldFats = data.Item.Fats;
+                    var newFats = oldFats + myFats;
+
+                    var oldCarbs = data.Item.Carbs;
+                    var newCarbs = oldCarbs + myCarbs;
+
+                    var oldFiber = data.Item.Fiber;
+                    var newFiber = oldFiber + myFiber;
+
+                    var oldSugars = data.Item.Sugars;
+                    var newSugars = oldSugars + mySugars;
+
+                    var oldProtein = data.Item.Protein;
+                    var newProtein = oldProtein + myProtein;
+
                     var updateParams = {
                         TableName: 'User',
                         Key: {
                             Id: 1
                         },
-                        UpdateExpression: "set Calories = :c",
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
                         ExpressionAttributeValues: {
-                            ":c":newCalories
+                            ":c":newCalories,
+                            ":f":newFats,
+                            ":b":newCarbs,
+                            ":r":newFiber,
+                            ":s":newSugars,
+                            ":p":newProtein
                         }
                     };
                     docClient.update(updateParams).promise().then((data) => {
-                        this.emit(':tell', speechOutput);
+                        var speechOutput = 'Ok, I logged the ' + myItemName + '. Anything else?'
+                        var reprompt = 'Anything else?';
+                        this.emit(':ask', speechOutput, reprompt);
                     })
                     .catch((err) => console.log(err));
                 })
@@ -182,13 +225,25 @@ var handlers = {
         };
         docClient.get(params).promise().then((data) => {
                 var myCalories = data.Item.Calories;
-                var speechOutput = 'You have eaten ' + myCalories + ' calories today';
+                var myFats = data.Item.Fats;
+                var myCarbs = data.Item.Carbs;
+                var myFiber = data.Item.Fiber;
+                var mySugars = data.Item.Sugars;
+                var myProtein = data.Item.Protein;
+                var speechOutput = 'Today, you have eaten ' + myCalories + ' calories, and '
+                    + myCarbs + ' grams of fat, and '
+                    + myFats + ' grams of carbohydrates, and '
+                    + myFiber + ' grams of fiber, and '
+                    + mySugars + ' grams of sugar, and '
+                    + myProtein + ' grams of protein';
                 this.emit(':tell', speechOutput);
             })
             .catch((err) => console.log(err));
-
-
+    },
+    'StopIntent': function () {
+        this.emit(':tell', 'Goodbye');
     }
+
 };
 
 

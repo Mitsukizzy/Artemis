@@ -25,6 +25,9 @@
       "intent": "HowAmIDoingIntent"
     },
     {
+      "intent": "StopIntent"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {
