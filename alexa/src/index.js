@@ -411,7 +411,7 @@ var handlers = {
             .catch((err) => console.log(err));
     },
     'StopIntent': function () {
-        this.emit(':tell', 'Goodbye');
+        this.emit(':tell', 'Ok. Goodbye');
     },
     'SetCalorieGoalIntent': function () {
         var myIntent = this.event.request.intent;
@@ -539,7 +539,7 @@ var handlers = {
                 speechOutput = speechOutput + myCalories + " calories total.";    
             }
             else if (myNutrientType === 'sugar') {
-                speechOutput = speechOutput + mySugars + " grams of sugars total.";    
+                speechOutput = speechOutput + mySugars + " grams of sugar total.";    
             }
             else if (myNutrientType === 'fat') {
                 speechOutput = speechOutput + myFats + " grams of fat total.";    
@@ -1915,8 +1915,48 @@ var handlers = {
 
             })
             .catch((err) => console.log(err));        
+    },
+    'GetWaterIntent': function () {
+        var getParams = {
+            TableName: "User",
+            Key: {
+                Id: 1
+            }
+        };
 
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            accessKeyId: 'AKIAJKTVMITXX54WN63A',
+            secretAccessKey: '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'
+        });
 
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        docClient.get(getParams).promise().then((data) => {
+
+                var w = data.Item.Water;
+                var newW = w + 10;
+
+                var updateParams = {
+                    TableName: 'User',
+                    Key: {
+                        Id: 1
+                    },
+                    UpdateExpression: "set Water=:w",
+                    ExpressionAttributeValues: {
+                        ":w":newW,
+                    }
+                };
+                docClient.update(updateParams).promise().then((data) => {
+                    var speechOutput = 'You have consumed ' + w + ' millileters of water today.';
+                    speechOutput += ' Anything else?';
+                    var reprompt = 'Anything else?';
+                    this.emit(':ask', speechOutput, reprompt);
+                })
+                .catch((err) => console.log(err));        
+
+            })
+            .catch((err) => console.log(err));   
     }
 };
 

@@ -198,3 +198,8 @@ YesIntent ok
 MakeQuickGoalIntent make a quick goal for {ItemNumber} {ItemName}
 MakeQuickGoalIntent I want to eat {ItemNumber} {ItemName}
 MakeQuickGoalIntent I want to have {ItemNumber} {ItemName}
+
+GetWaterIntent how much water have I drank
+GetWaterIntent how much water have I drank today
+GetWaterIntent how much water have I had today
+GetWaterIntent how much water have I had so far

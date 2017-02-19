@@ -160,6 +160,9 @@
       "intent": "YesIntent"
     },
     {
+      "intent": "GetWaterIntent"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {
