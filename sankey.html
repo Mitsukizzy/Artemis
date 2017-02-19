@@ -22,6 +22,53 @@
     <link href="assets/css/style-responsive.css" rel="stylesheet">
 
     <script src="assets/js/chart-master/Chart.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+  google.charts.load("current", {packages:["sankey"]});
+  google.charts.setOnLoadCallback(drawChart);
+   function drawChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'From');
+    data.addColumn('string', 'To');
+    data.addColumn('number', 'Weight');
+    data.addRows([
+      ['bagel', 'carbs', 7],
+      ['bagel', 'fats', 4],
+      ['bagel', 'fiber', 5],
+      ['bagel', 'protein', 2],
+      ['bagel', 'sugars', 2],
+      ['steak', 'carbs', 3],
+      ['steak', 'fats', 4],
+      ['steak', 'fiber', 5],
+      ['steak', 'protein', 10],
+      ['steak', 'sugars', 5],
+    ]);
+
+    var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
+            '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
+
+    // Set chart options
+    var options = {
+      width: 600,
+      sankey: {
+        node: {
+          colors: colors,
+        },
+        link: {
+          colorMode: 'gradient',
+          colors: colors
+        },
+      }
+
+    };
+
+    // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.Sankey(document.getElementById('sankey_multiple'));
+    chart.draw(data, options);
+   }
+</script>
+
+
     
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -94,23 +141,10 @@
       <!--Responsive Table-->
       <section id="main-content">
           <section class="wrapper">
-            
-          <h4><i class="fa fa-angle-right"></i>Recently Logged</h4>
-                <section id="unseen">
-                <table class="table table-bordered table-striped table-condensed">
-                    <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th class="numeric">Quantity</th>
-                        <th class="numeric">Calories</th>
-                        <th>Time Logged</th>
-                    </tr>
-                    </thead>
-                    <tbody id="logTable">   
-
-                    </tbody>
-                </table>
-                </section>       
+          <div class="showback">
+          <h4><i class="fa fa-angle-right"></i>Item Percentage</h4>
+          <div id="sankey_multiple" style="width: 900px; height: 300px;"></div>  
+          </div>   
 
 		</section><!--/wrapper -->
       </section><!-- /MAIN CONTENT -->
