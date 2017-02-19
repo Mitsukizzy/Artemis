@@ -2240,4 +2240,18 @@ label {
     min-height: 900px;
 }
 
+.progress-label {
+    float: left;
+    margin-right: 1em;
+}
+
+.piechart {
+    font-family: 'Ruda', sans-serif;
+    display: block;
+}
+
+.center-it-pls {
+    display: flex;
+    justify-content: space-around; 
+}
 

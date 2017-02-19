@@ -1,29 +1,31 @@
+
 <?php
-ini_set('display_errors', 1);
-require '/home/isaben1/php/aws/aws-autoloader.php';
+  ini_set('display_errors', 1);
+  require '/home/isaben1/php/aws/aws-autoloader.php';
 
-date_default_timezone_set('UTC');
+  date_default_timezone_set('UTC');
 
-use Aws\DynamoDb\Exception\DynamoDbException;
-use Aws\DynamoDb\Marshaler;
+  use Aws\DynamoDb\Exception\DynamoDbException;
+  use Aws\DynamoDb\Marshaler;
 
-$sdk = new Aws\Sdk([
-    'region'   => 'us-east-1',
-    'version'  => 'latest',
-    'endpoint' => 'https://dynamodb.us-east-1.amazonaws.com',
-    'credentials' => [
-        'key'    => 'AKIAJKTVMITXX54WN63A',
-        'secret' => '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'
-    ]
-]);
+  $sdk = new Aws\Sdk([
+      'region'   => 'us-east-1',
+      'version'  => 'latest',
+      'endpoint' => 'https://dynamodb.us-east-1.amazonaws.com',
+      'credentials' => [
+          'key'    => 'AKIAJKTVMITXX54WN63A',
+          'secret' => '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'
+      ]
+  ]);
 
 
-$dynamodb = $sdk->createDynamoDb();
-$marshaler = new Marshaler();
+  $dynamodb = $sdk->createDynamoDb();
+  $marshaler = new Marshaler();
 
-$tableName = 'LoggedItems';
-unset($response); 
+  $tableName = 'LoggedItems';
+  unset($response); 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +53,33 @@ unset($response);
     <script src="assets/js/chart-master/Chart.js"></script>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
     
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Food Category', 'grams per Day'],
+          ['Fats',     11],
+          ['Carbohydrates',      2],
+          ['Fibers',  2],
+          ['Sugars', 2],
+          ['Protein',    7]
+        ]);
+
+        var options = {
+          legend: 'none',
+          fontName: 'Ruda',
+          chartArea:{left:70,top:0,width:'80%',height:'80%'},
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+  </script>
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -137,7 +166,7 @@ unset($response);
                             </thead>
                             <tbody>   
                             <?php
-                                // Scan table and loop through rows to add to table
+                                Scan table and loop through rows to add to table
                                 $response = $dynamodb->scan([
                                     'TableName' => $tableName
                                 ]);
@@ -167,35 +196,47 @@ unset($response);
 
             <div class="row mt">
       			<div class="col-lg-6 col-md-6 col-sm-12">
-      				<! -- BASIC PROGRESS BARS -->
+      				<!-- BASIC PROGRESS BARS -->
       				<div class="showback">
       					<h4><i class="fa fa-angle-right"></i>Quick Goals</h4>
 	      				<div class="progress">
-						  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+						  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
 						    <span class="sr-only">40% Complete (success)</span>
 						  </div>
 						</div>
 						<div class="progress">
-						  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+						  <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
 						    <span class="sr-only">20% Complete</span>
 						  </div>
 						</div>
 						<div class="progress">
-						  <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+						  <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
 						    <span class="sr-only">60% Complete (warning)</span>
 						  </div>
 						</div>
+
 						<div class="progress">
-						  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-						    <span class="sr-only">80% Complete</span>
+						  <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+						    <h4><i class="fa"></i>Eat five apples this week</h4>
+                <span class="sr-only">80% Complete</span>
 						  </div>
 						</div>
+
+
       				</div><!--/showback -->
-      			</div>
+
+      			</div> <!-- pie -->
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="showback center-me-pls">
+                <h4><i class="fa fa-angle-right"></i>Daily Digest</h4>
+                   <div id="piechart" style="width: 300px; height: 300px; "></div>
+              </div><!--/showback -->
             </div>
-		</section><! --/wrapper -->
+
+		</section><!--/wrapper -->
       </section><!-- /MAIN CONTENT -->
-                  
+
+
 
       <!--main content end-->
   </section>
@@ -228,7 +269,8 @@ unset($response);
 
     <!--script for this page-->
     <script src="assets/js/sparkline-chart.js"></script>    
-	<script src="assets/js/zabuto_calendar.js"></script>	
+    <script src="assets/js/zabuto_calendar.js"></script>	
+
 	
 	<script type="application/javascript">
         $(document).ready(function () {
