@@ -73,7 +73,10 @@
                           <span>Charts</span>
                       </a>
                       <ul class="sub">
-                          <li><a class="active" href="blank.php">Blank Page</a></li>
+                          <li><a href="daily_breakdown.html">Categorical Breakdown</a></li>
+                          <li><a href="sankey.html">Item Percentage</a></li>
+                          <li><a class="active" href="water_log.html">Water Log</a></li>
+                          <li><a href="caloric_variance.html">Caloric Variance</a></li>
                           <li><a href="chartjs.html">Chartjs</a></li>
                       </ul>
                   </li>
@@ -109,7 +112,7 @@
                 </table>
                 </section>       
 
-		</section><! --/wrapper -->
+		</section><!--/wrapper -->
       </section><!-- /MAIN CONTENT -->
                   
 
@@ -141,25 +144,6 @@
     
     <script type="text/javascript" src="assets/js/gritter/js/jquery.gritter.js"></script>
     <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
-
-    <!--script for this page-->
-    <script type="text/javascript">
-         function refreshTable() {
-            $.ajax({
-                url:'queries.php',
-                complete: function (response) {
-                    $('#logTable').html( response.responseText );
-                    setTimeout(refreshTable, 7500);
-                },
-                error: function () {
-                    $('#logTable').html('An error has occured!');
-                    setTimeout(refreshTable, 7500);
-                }
-            });
-            return false;
-        }
-        refreshTable();
-    </script>
   
 
   </body>
