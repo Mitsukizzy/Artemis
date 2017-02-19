@@ -114,7 +114,9 @@ var handlers = {
             var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars']);
             var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein']);
 
-            var timestamp = new Date();
+            var d = new Date();
+            var utc = d.getTime() + (d.getTimezoneOffset()*60000);
+            var timestamp = new Date(utc + (3600000 * (-8)));
             var logTime = "" + timestamp.getDate() + "/"
                 + (timestamp.getMonth()+1)  + "/" 
                 + timestamp.getFullYear() + " @ "  
