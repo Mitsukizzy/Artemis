@@ -28,6 +28,33 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Hour', 'Sales', 'Expenses'],
+          ['00:00',  1000,      400],
+          ['02',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+
+        var options = {
+          title: 'Company Performance',
+          curveType: 'function',
+          fontName: 'Ruda',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
   </head>
 
   <body>
@@ -96,21 +123,7 @@
           <section class="wrapper">
             
           <h4><i class="fa fa-angle-right"></i>Recently Logged</h4>
-                <section id="unseen">
-                <table class="table table-bordered table-striped table-condensed">
-                    <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th class="numeric">Quantity</th>
-                        <th class="numeric">Calories</th>
-                        <th>Time Logged</th>
-                    </tr>
-                    </thead>
-                    <tbody id="logTable">   
-
-                    </tbody>
-                </table>
-                </section>       
+          <div id="curve_chart" style="width: 900px; height: 500px"></div>        
 
 		</section><!--/wrapper -->
       </section><!-- /MAIN CONTENT -->
