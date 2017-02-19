@@ -125,6 +125,8 @@ var handlers = {
                 + timestamp.getHours() + ":"  
                 + timestamp.getMinutes() + ":" 
                 + timestamp.getSeconds();
+            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
             var table = 'LoggedItems';
             console.log("passed another checkpoint");
             var params = {
@@ -137,6 +139,8 @@ var handlers = {
                     Fiber: myFiber,
                     Sugars: mySugars,
                     Protein: myProtein,
+                    Day: myDay,
+                    HourMinute: myHourMinute,
                     Items: {
                         [myItemName]: 1
                     }
@@ -271,6 +275,8 @@ var handlers = {
                 + timestamp.getHours() + ":"  
                 + timestamp.getMinutes() + ":" 
                 + timestamp.getSeconds();
+                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
             var table = 'LoggedItems';
             console.log("passed another checkpoint");
             var params = {
@@ -283,6 +289,8 @@ var handlers = {
                     Fiber: myFiber,
                     Sugars: mySugars,
                     Protein: myProtein,
+                    Day: myDay,
+                    HourMinute: myHourMinute,
                     Items: {
                         [myItemName]: myItemNum
                     }
@@ -601,6 +609,8 @@ var handlers = {
                 + timestamp.getHours() + ":"  
                 + timestamp.getMinutes() + ":" 
                 + timestamp.getSeconds();
+                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
             var table = 'LoggedItems';
             console.log("passed another checkpoint");
             var params = {
@@ -613,6 +623,8 @@ var handlers = {
                     Fiber: myFiber,
                     Sugars: mySugars,
                     Protein: myProtein,
+                    Day: myDay,
+                    HourMinute: myHourMinute,
                     Items: {
                         [myItemNameA]: myItemNumA
                     }
@@ -699,6 +711,8 @@ var handlers = {
                                 + timestamp.getHours() + ":"  
                                 + timestamp.getMinutes() + ":" 
                                 + timestamp.getSeconds();
+                                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
                             var table = 'LoggedItems';
                             console.log("passed another checkpoint");
                             var params = {
@@ -711,6 +725,8 @@ var handlers = {
                                     Fiber: myFiber,
                                     Sugars: mySugars,
                                     Protein: myProtein,
+                                    Day: myDay,
+                                    HourMinute: myHourMinute,
                                     Items: {
                                         [myItemNameB]: myItemNumB
                                     }
@@ -853,6 +869,8 @@ var handlers = {
                 + timestamp.getHours() + ":"  
                 + timestamp.getMinutes() + ":" 
                 + timestamp.getSeconds();
+            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
             var table = 'LoggedItems';
             console.log("passed another checkpoint");
             var params = {
@@ -865,6 +883,8 @@ var handlers = {
                     Fiber: myFiber,
                     Sugars: mySugars,
                     Protein: myProtein,
+                    Day: myDay,
+                    HourMinute: myHourMinute,
                     Items: {
                         [myItemNameA]: myItemNumA
                     }
@@ -951,6 +971,8 @@ var handlers = {
                                 + timestamp.getHours() + ":"  
                                 + timestamp.getMinutes() + ":" 
                                 + timestamp.getSeconds();
+                                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
                             var table = 'LoggedItems';
                             console.log("passed another checkpoint");
                             var params = {
@@ -963,6 +985,8 @@ var handlers = {
                                     Fiber: myFiber,
                                     Sugars: mySugars,
                                     Protein: myProtein,
+                                    Day: myDay,
+                                    HourMinute: myHourMinute,
                                     Items: {
                                         [myItemNameB]: myItemNumB
                                     }
@@ -1105,6 +1129,8 @@ var handlers = {
                 + timestamp.getHours() + ":"  
                 + timestamp.getMinutes() + ":" 
                 + timestamp.getSeconds();
+                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
             var table = 'LoggedItems';
             console.log("passed another checkpoint");
             var params = {
@@ -1117,6 +1143,8 @@ var handlers = {
                     Fiber: myFiber,
                     Sugars: mySugars,
                     Protein: myProtein,
+                    Day: myDay,
+                    HourMinute: myHourMinute,
                     Items: {
                         [myItemNameA]: myItemNumA
                     }
@@ -1203,6 +1231,8 @@ var handlers = {
                                 + timestamp.getHours() + ":"  
                                 + timestamp.getMinutes() + ":" 
                                 + timestamp.getSeconds();
+                                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
                             var table = 'LoggedItems';
                             console.log("passed another checkpoint");
                             var params = {
@@ -1215,6 +1245,8 @@ var handlers = {
                                     Fiber: myFiber,
                                     Sugars: mySugars,
                                     Protein: myProtein,
+                                    Day: myDay,
+                                    HourMinute: myHourMinute,
                                     Items: {
                                         [myItemNameB]: myItemNumB
                                     }
@@ -1357,6 +1389,8 @@ var handlers = {
                 + timestamp.getHours() + ":"  
                 + timestamp.getMinutes() + ":" 
                 + timestamp.getSeconds();
+                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
             var table = 'LoggedItems';
             console.log("passed another checkpoint");
             var params = {
@@ -1369,6 +1403,8 @@ var handlers = {
                     Fiber: myFiber,
                     Sugars: mySugars,
                     Protein: myProtein,
+                    Day: myDay,
+                    HourMinute: myHourMinute,
                     Items: {
                         [myItemNameA]: myItemNumA
                     }
@@ -1455,6 +1491,8 @@ var handlers = {
                                 + timestamp.getHours() + ":"  
                                 + timestamp.getMinutes() + ":" 
                                 + timestamp.getSeconds();
+                                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
                             var table = 'LoggedItems';
                             console.log("passed another checkpoint");
                             var params = {
@@ -1467,6 +1505,8 @@ var handlers = {
                                     Fiber: myFiber,
                                     Sugars: mySugars,
                                     Protein: myProtein,
+                                    Day: myDay,
+                                    HourMinute: myHourMinute,
                                     Items: {
                                         [myItemNameB]: myItemNumB
                                     }
@@ -1679,6 +1719,8 @@ var handlers = {
                 + timestamp.getHours() + ":"  
                 + timestamp.getMinutes() + ":" 
                 + timestamp.getSeconds();
+                            var myDay = timestamp.getDate()-18; //special for purposes of hackathon
+            var myHourMinute = "" + timestamp.getHours() + ":" + timestamp.getMinutes();
             var table = 'LoggedItems';
             console.log("passed another checkpoint");
             var params = {
@@ -1691,6 +1733,8 @@ var handlers = {
                     Fiber: myFiber,
                     Sugars: mySugars,
                     Protein: myProtein,
+                    Day: myDay,
+                    HourMinute: myHourMinute,
                     Items: {
                         [myItemName]: 1
                     }
