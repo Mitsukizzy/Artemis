@@ -160,6 +160,12 @@
       "intent": "YesIntent"
     },
     {
+      "intent": "GetWaterIntent"
+    },
+    {
+      "intent": "HealthyOptionIntent"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {

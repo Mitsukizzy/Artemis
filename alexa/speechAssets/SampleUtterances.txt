@@ -61,6 +61,7 @@ LogSingleItemAndSingleItemIntent I ate {ItemNameA} and an {ItemNameB}
 LogSingleItemAndSingleItemIntent I ate an {ItemNameA} and an {ItemNameB}
 
 HowAmIDoingIntent how am I doing
+HowAmIDoingIntent how am I
 
 StopIntent no thank you
 StopIntent no
@@ -194,7 +195,23 @@ YesIntent yes
 YesIntent yes please
 YesIntent sure
 YesIntent ok
+YesIntent ok then log it
+YesIntent sure log it
+YesIntent sounds good
 
 MakeQuickGoalIntent make a quick goal for {ItemNumber} {ItemName}
 MakeQuickGoalIntent I want to eat {ItemNumber} {ItemName}
 MakeQuickGoalIntent I want to have {ItemNumber} {ItemName}
+
+GetWaterIntent how much water have I drank
+GetWaterIntent how much water have I drank today
+GetWaterIntent how much water have I had today
+GetWaterIntent how much water have I had so far
+
+HealthyOptionIntent is there a healthier option
+HealthyOptionIntent what else could I have
+HealthyOptionIntent what should I eat today
+HealthyOptionIntent what else is there
+HealthyOptionIntent what else should I have
+HealthyOptionIntent what else should I eat
+HealthyOptionIntent what should I have today

@@ -19,6 +19,8 @@ var handlers = {
         this.emit(':ask', 'Welcome to Artemis. How may I help you?');
     },
     'LogItemIntent': function () {
+                logAnywaysState = false;
+
         /*
         Intended to calculate the caloric count of an item, then add it as an item to our database
         */
@@ -220,6 +222,8 @@ var handlers = {
 
     },
     'LogMultipleItemsIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNum = parseInt(myIntent.slots.ItemNumber.value);
         var myItemName = myIntent.slots.ItemName.value;
@@ -411,7 +415,7 @@ var handlers = {
             .catch((err) => console.log(err));
     },
     'StopIntent': function () {
-        this.emit(':tell', 'Goodbye');
+        this.emit(':tell', 'Ok. Goodbye');
     },
     'SetCalorieGoalIntent': function () {
         var myIntent = this.event.request.intent;
@@ -476,7 +480,7 @@ var handlers = {
             var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars']);
             var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein']);
             var speechOutput = "On average, a " + myItemName + " has "
-            if (myNutrientType === 'carb') {
+            if (myNutrientType === 'carbs') {
                 speechOutput = speechOutput + myCarbs + " grams of carbohydrates per serving.";    
             }
             else if (myNutrientType === 'calories') {
@@ -539,7 +543,7 @@ var handlers = {
                 speechOutput = speechOutput + myCalories + " calories total.";    
             }
             else if (myNutrientType === 'sugar') {
-                speechOutput = speechOutput + mySugars + " grams of sugars total.";    
+                speechOutput = speechOutput + mySugars + " grams of sugar total.";    
             }
             else if (myNutrientType === 'fat') {
                 speechOutput = speechOutput + myFats + " grams of fat total.";    
@@ -558,6 +562,8 @@ var handlers = {
         });
     },
     'LogMultipleItemsAndMultipleItemsIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNumA = parseInt(myIntent.slots.ItemNumberA.value);
         var myItemNameA = myIntent.slots.ItemNameA.value;
@@ -831,6 +837,8 @@ var handlers = {
         });
     },
     'LogMultipleItemsAndSingleItemIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNumA = parseInt(myIntent.slots.ItemNumberA.value);
         var myItemNameA = myIntent.slots.ItemNameA.value;
@@ -1102,6 +1110,8 @@ var handlers = {
         });
     },
     'LogSingleItemAndMultipleItemsIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNumB = parseInt(myIntent.slots.ItemNumberB.value);
         var myItemNameA = myIntent.slots.ItemNameA.value;
@@ -1374,6 +1384,8 @@ var handlers = {
         });
     },
     'LogSingleItemAndSingleItemIntent': function () {
+                logAnywaysState = false;
+
         var myIntent = this.event.request.intent;
         var myItemNumB = 1;
         var myItemNameA = myIntent.slots.ItemNameA.value;
@@ -1915,8 +1927,53 @@ var handlers = {
 
             })
             .catch((err) => console.log(err));        
+    },
+    'GetWaterIntent': function () {
+        var getParams = {
+            TableName: "User",
+            Key: {
+                Id: 1
+            }
+        };
 
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            accessKeyId: 'AKIAJKTVMITXX54WN63A',
+            secretAccessKey: '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'
+        });
 
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        docClient.get(getParams).promise().then((data) => {
+
+                var w = data.Item.Water;
+                var newW = w + 10;
+
+                var updateParams = {
+                    TableName: 'User',
+                    Key: {
+                        Id: 1
+                    },
+                    UpdateExpression: "set Water=:w",
+                    ExpressionAttributeValues: {
+                        ":w":newW,
+                    }
+                };
+                docClient.update(updateParams).promise().then((data) => {
+                    var speechOutput = 'You have consumed ' + w + ' millileters of water today.';
+                    speechOutput += ' Anything else?';
+                    var reprompt = 'Anything else?';
+                    this.emit(':ask', speechOutput, reprompt);
+                })
+                .catch((err) => console.log(err));        
+
+            })
+            .catch((err) => console.log(err));   
+    },
+    'HealthyOptionIntent': function () {
+        logAnywaysState = false;
+        var speechOutput = 'Today\'s healthy suggestions are grilled chicken breast and kale.';
+        this.emit(':tell', speechOutput);
     }
 };
 
