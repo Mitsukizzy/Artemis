@@ -133,7 +133,19 @@
           "type": "LIST_OF_ITEM_NAMES"
         }
       ]
-    },    
+    },
+    {
+      "intent": "ShouldIEatIntent",
+      "slots": [
+        {
+          "name": "ItemName",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    },  
+    {
+      "intent": "YesIntent"
+    },
     {
       "intent": "AMAZON.HelpIntent"
     },
