@@ -30,17 +30,10 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
+      function drawChart(breakdown) {
 
-        var data = google.visualization.arrayToDataTable([
-          ['Food Category', 'grams per Day'],
-          ['Fats',     11],
-          ['Carbohydrates',      2],
-          ['Fibers',  2],
-          ['Sugars', 2],
-          ['Protein',    7]
-        ]);
+        var arr = JSON.parse(breakdown);
+        var data = google.visualization.arrayToDataTable(arr);
 
         var options = {
           legend: 'none',
@@ -281,7 +274,28 @@
             });
             return false;
         }
-        refreshTable();
+
+         function refreshChart() {
+            $.ajax({
+                url:'/php/daily_index.php',
+                complete: function (response) {
+                    console.log("index", response.responseText);
+                    drawChart(response.responseText);
+                    setTimeout(refreshChart, 7500);
+                },
+                error: function () {
+                    $('#logTable').html('An error has occured!');
+                    setTimeout(refreshChart, 7500);
+                }
+            });
+            return false;
+        }
+
+        // Initial calls
+        $( document ).ready(function() {
+            refreshTable();
+            refreshChart();
+        });
     </script>
 
     <script>

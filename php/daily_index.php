@@ -46,8 +46,12 @@ foreach ($response['Items'] as $key => $value) {
     $fats +=  $value['Fats']['N'];
 } 
 $php_array = array(
-    array("Date", "Carbs", "Fiber", "Sugars", "Protein", "Fats"), 
-    array($day, $carbs, $fiber, $sugars, $protein, $fats), 
+    array('Food Category', 'grams per Day'), 
+    array('Carbs', $carbs), 
+    array('Fiber', $fiber), 
+    array('Sugars', $sugars), 
+    array('Protein', $protein), 
+    array('Fats', $fats)
 );
 
 echo json_encode($php_array, JSON_NUMERIC_CHECK);
