@@ -142,7 +142,20 @@
           "type": "LIST_OF_ITEM_NAMES"
         }
       ]
-    },  
+    },
+    {
+      "intent": "MakeQuickGoalIntent",
+      "slots": [
+        {
+          "name": "ItemName",
+          "type": "LIST_OF_ITEM_NAMES"
+        },
+        {
+          "name": "ItemNumber",
+          "type": "AMAZON.NUMBER"          
+        }
+      ]
+    }, 
     {
       "intent": "YesIntent"
     },

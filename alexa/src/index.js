@@ -177,19 +177,25 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                    var goals = data.Item.Goals;
+                        if (goals[myItemName] != undefined) {
+                            goals[myItemName] = goals[myItemName] + 0.01;
+                        }
+
                     var updateParams = {
                         TableName: 'User',
                         Key: {
                             Id: 1
                         },
-                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                         ExpressionAttributeValues: {
                             ":c":newCalories,
                             ":f":newFats,
                             ":b":newCarbs,
                             ":r":newFiber,
                             ":s":newSugars,
-                            ":p":newProtein
+                            ":p":newProtein,
+                            ":g":goals
                         }
                     };
                     docClient.update(updateParams).promise().then((data) => {
@@ -327,19 +333,25 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                    var goals = data.Item.Goals;
+                    if (goals[myItemName] != undefined) {
+                            goals[myItemName] = goals[myItemName] + 0.01*myItemNum;
+                    }
+
                     var updateParams = {
                         TableName: 'User',
                         Key: {
                             Id: 1
                         },
-                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                         ExpressionAttributeValues: {
                             ":c":newCalories,
                             ":f":newFats,
                             ":b":newCarbs,
                             ":r":newFiber,
                             ":s":newSugars,
-                            ":p":newProtein
+                            ":p":newProtein,
+                            ":g":goals
                         }
                     };
                     docClient.update(updateParams).promise().then((data) => {
@@ -661,19 +673,26 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                    var goals = data.Item.Goals;
+                    if (goals[myItemNameA] != undefined) {
+                            goals[myItemNameA] = goals[myItemNameA] + 0.01*myItemNumA;
+                    }
+
+
                     var updateParams = {
                         TableName: 'User',
                         Key: {
                             Id: 1
                         },
-                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                         ExpressionAttributeValues: {
                             ":c":newCalories,
                             ":f":newFats,
                             ":b":newCarbs,
                             ":r":newFiber,
                             ":s":newSugars,
-                            ":p":newProtein
+                            ":p":newProtein,
+                            ":g":goals
                         }
                     };
                     docClient.update(updateParams).promise().then((data) => {
@@ -763,19 +782,25 @@ var handlers = {
 
                                     var calorieGoal = data.Item.CalorieGoal;
 
+                                                        var goals = data.Item.Goals;
+                    if (goals[myItemNameB] != undefined) {
+                            goals[myItemNameB] = goals[myItemNameB] + 0.01*myItemNumB;
+                    }
+
                                     var updateParams = {
                                         TableName: 'User',
                                         Key: {
                                             Id: 1
                                         },
-                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                                         ExpressionAttributeValues: {
                                             ":c":newCalories,
                                             ":f":newFats,
                                             ":b":newCarbs,
                                             ":r":newFiber,
                                             ":s":newSugars,
-                                            ":p":newProtein
+                                            ":p":newProtein,
+                                            ":g":goals
                                         }
                                     };
                                     docClient.update(updateParams).promise().then((data) => {
@@ -921,19 +946,25 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                                        var goals = data.Item.Goals;
+                    if (goals[myItemNameA] != undefined) {
+                            goals[myItemNameA] = goals[myItemNameA] + 0.01*myItemNumA;
+                    }
+
                     var updateParams = {
                         TableName: 'User',
                         Key: {
                             Id: 1
                         },
-                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                         ExpressionAttributeValues: {
                             ":c":newCalories,
                             ":f":newFats,
                             ":b":newCarbs,
                             ":r":newFiber,
                             ":s":newSugars,
-                            ":p":newProtein
+                            ":p":newProtein,
+                            ":g":goals
                         }
                     };
                     docClient.update(updateParams).promise().then((data) => {
@@ -1022,20 +1053,25 @@ var handlers = {
                                     var newProtein = oldProtein + myProtein;
 
                                     var calorieGoal = data.Item.CalorieGoal;
+                                                        var goals = data.Item.Goals;
+                    if (goals[myItemNameB] != undefined) {
+                            goals[myItemNameB] = goals[myItemNameB] + 0.01*myItemNumB;
+                    }
 
                                     var updateParams = {
                                         TableName: 'User',
                                         Key: {
                                             Id: 1
                                         },
-                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                                         ExpressionAttributeValues: {
                                             ":c":newCalories,
                                             ":f":newFats,
                                             ":b":newCarbs,
                                             ":r":newFiber,
                                             ":s":newSugars,
-                                            ":p":newProtein
+                                            ":p":newProtein,
+                                            ":g":goals
                                         }
                                     };
                                     docClient.update(updateParams).promise().then((data) => {
@@ -1181,19 +1217,25 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                    var goals = data.Item.Goals;
+                    if (goals[myItemNameA] != undefined) {
+                            goals[myItemNameA] = goals[myItemNameA] + 0.01*myItemNumA;
+                    }
+
                     var updateParams = {
                         TableName: 'User',
                         Key: {
                             Id: 1
                         },
-                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                         ExpressionAttributeValues: {
                             ":c":newCalories,
                             ":f":newFats,
                             ":b":newCarbs,
                             ":r":newFiber,
                             ":s":newSugars,
-                            ":p":newProtein
+                            ":p":newProtein,
+                            ":g":goals
                         }
                     };
                     docClient.update(updateParams).promise().then((data) => {
@@ -1283,19 +1325,25 @@ var handlers = {
 
                                     var calorieGoal = data.Item.CalorieGoal;
 
+                                                        var goals = data.Item.Goals;
+                    if (goals[myItemNameB] != undefined) {
+                            goals[myItemNameB] = goals[myItemNameB] + 0.01*myItemNumB;
+                    }
+
                                     var updateParams = {
                                         TableName: 'User',
                                         Key: {
                                             Id: 1
                                         },
-                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                                         ExpressionAttributeValues: {
                                             ":c":newCalories,
                                             ":f":newFats,
                                             ":b":newCarbs,
                                             ":r":newFiber,
                                             ":s":newSugars,
-                                            ":p":newProtein
+                                            ":p":newProtein,
+                                            ":g":goals
                                         }
                                     };
                                     docClient.update(updateParams).promise().then((data) => {
@@ -1441,19 +1489,25 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                                        var goals = data.Item.Goals;
+                    if (goals[myItemNameA] != undefined) {
+                            goals[myItemNameA] = goals[myItemNameA] + 0.01*myItemNumA;
+                    }
+
                     var updateParams = {
                         TableName: 'User',
                         Key: {
                             Id: 1
                         },
-                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                         ExpressionAttributeValues: {
                             ":c":newCalories,
                             ":f":newFats,
                             ":b":newCarbs,
                             ":r":newFiber,
                             ":s":newSugars,
-                            ":p":newProtein
+                            ":p":newProtein,
+                            ":g":goals
                         }
                     };
                     docClient.update(updateParams).promise().then((data) => {
@@ -1543,19 +1597,25 @@ var handlers = {
 
                                     var calorieGoal = data.Item.CalorieGoal;
 
+                                                        var goals = data.Item.Goals;
+                    if (goals[myItemNameB] != undefined) {
+                            goals[myItemNameB] = goals[myItemNameB] + 0.01*myItemNumB;
+                    }
+
                                     var updateParams = {
                                         TableName: 'User',
                                         Key: {
                                             Id: 1
                                         },
-                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                                         ExpressionAttributeValues: {
                                             ":c":newCalories,
                                             ":f":newFats,
                                             ":b":newCarbs,
                                             ":r":newFiber,
                                             ":s":newSugars,
-                                            ":p":newProtein
+                                            ":p":newProtein,
+                                            ":g":goals
                                         }
                                     };
                                     docClient.update(updateParams).promise().then((data) => {
@@ -1771,19 +1831,25 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                                        var goals = data.Item.Goals;
+                    if (goals[myItemName] != undefined) {
+                            goals[myItemName] = goals[myItemName] + 0.01;
+                    }
+
                     var updateParams = {
                         TableName: 'User',
                         Key: {
                             Id: 1
                         },
-                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p",
+                        UpdateExpression: "set Calories=:c, Fats=:f, Carbs=:b, Fiber=:r, Sugars=:s, Protein=:p, Goals=:g",
                         ExpressionAttributeValues: {
                             ":c":newCalories,
                             ":f":newFats,
                             ":b":newCarbs,
                             ":r":newFiber,
                             ":s":newSugars,
-                            ":p":newProtein
+                            ":p":newProtein,
+                            ":g":goals
                         }
                     };
                     docClient.update(updateParams).promise().then((data) => {
@@ -1798,6 +1864,59 @@ var handlers = {
             })
             .catch((err) => console.log(err));
         });
+    },
+    'MakeQuickGoalIntent': function () {
+        var myIntent = this.event.request.intent;
+        var myItemName = myIntent.slots.ItemName.value;
+        var myItemNum = parseInt(myIntent.slots.ItemNumber.value);
+
+        if (myItemName == undefined || myIntent.slots.ItemNumber.value == undefined) {
+            this.emit(':tell', 'I am sorry, I do not know what that is')            
+        }
+
+        var getParams = {
+            TableName: "User",
+            Key: {
+                Id: 1
+            }
+        };
+
+        AWS.config.update({
+            region: "us-east-1",
+            endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
+            accessKeyId: 'AKIAJKTVMITXX54WN63A',
+            secretAccessKey: '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'
+        });
+
+            var docClient = new AWS.DynamoDB.DocumentClient();           
+
+            docClient.get(getParams).promise().then((data) => {
+
+                var myMap = data.Item.Goals;
+                myMap[myItemName] = myItemNum;
+
+                var updateParams = {
+                    TableName: 'User',
+                    Key: {
+                        Id: 1
+                    },
+                    UpdateExpression: "set Goals=:g",
+                    ExpressionAttributeValues: {
+                        ":g":myMap,
+                    }
+                };
+                docClient.update(updateParams).promise().then((data) => {
+                    var speechOutput = 'Ok, a new quick goal was set this week for ' + myItemNum + ' ' + myItemName + '.';
+                    speechOutput += ' Anything else?';
+                    var reprompt = 'Anything else?';
+                    this.emit(':ask', speechOutput, reprompt);
+                })
+                .catch((err) => console.log(err));        
+
+            })
+            .catch((err) => console.log(err));        
+
+
     }
 };
 
