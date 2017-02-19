@@ -1,31 +1,3 @@
-<?php
-ini_set('display_errors', 1);
-require '/home/isaben1/php/aws/aws-autoloader.php';
-
-date_default_timezone_set('UTC');
-
-use Aws\DynamoDb\Exception\DynamoDbException;
-use Aws\DynamoDb\Marshaler;
-
-$sdk = new Aws\Sdk([
-    'region'   => 'us-east-1',
-    'version'  => 'latest',
-    'endpoint' => 'https://dynamodb.us-east-1.amazonaws.com',
-    'credentials' => [
-        'key'    => 'AKIAJKTVMITXX54WN63A',
-        'secret' => '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'
-    ]
-]);
-
-
-$dynamodb = $sdk->createDynamoDb();
-$marshaler = new Marshaler();
-
-$tableName = 'LoggedItems';
-unset($response); 
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -131,25 +103,8 @@ unset($response);
                         <th>Time Logged</th>
                     </tr>
                     </thead>
-                    <tbody>   
-                    <?php
-                        // Scan table and loop through rows to add to table
-                        $response = $dynamodb->scan([
-                            'TableName' => $tableName
-                        ]);
+                    <tbody id="logTable">   
 
-                        foreach ($response['Items'] as $key => $value) {
-                            echo "\n";
-                            echo '<tr>';
-                            foreach ($value['Items']['M'] as $iKey => $iValue) {                                
-                                echo '    <td>' . $iKey . '</td>';
-                                echo '    <td class="numeric">' . $iValue['N'] . '</td>';
-                            }
-                            echo '    <td class="numeric">' . $value['Calories']['N'] . '</td>';
-                            echo '    <td>' . $value['TimeOfLog']['S'] . '</td>';
-                            echo '</tr>';
-                        }
-                    ?>
                     </tbody>
                 </table>
                 </section>       
@@ -188,42 +143,23 @@ unset($response);
     <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
 
     <!--script for this page-->
-    <script src="assets/js/sparkline-chart.js"></script>    
-	<script src="assets/js/zabuto_calendar.js"></script>	
-	
-	<script type="application/javascript">
-        $(document).ready(function () {
-            $("#date-popover").popover({html: true, trigger: "manual"});
-            $("#date-popover").hide();
-            $("#date-popover").click(function (e) {
-                $(this).hide();
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript">
+         function refreshTable() {
+            $.ajax({
+                url:'queries.php',
+                complete: function (response) {
+                    $('#logTable').html( response.responseText );
+                    setTimeout(refreshTable, 7500);
+                },
+                error: function () {
+                    $('#logTable').html('An error has occured!');
+                    setTimeout(refreshTable, 7500);
+                }
             });
-        
-            $("#my-calendar").zabuto_calendar({
-                action: function () {
-                    return myDateFunction(this.id, false);
-                },
-                action_nav: function () {
-                    return myNavFunction(this.id);
-                },
-                ajax: {
-                    url: "show_data.php?action=1",
-                    modal: true
-                },
-                legend: [
-                    {type: "text", label: "Special event", badge: "00"},
-                    {type: "block", label: "Regular event", }
-                ]
-            });
-        });
-        
-        
-        function myNavFunction(id) {
-            $("#date-popover").hide();
-            var nav = $("#" + id).data("navigation");
-            var to = $("#" + id).data("to");
-            console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
+            return false;
         }
+        refreshTable();
     </script>
   
 

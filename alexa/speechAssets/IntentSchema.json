@@ -25,6 +25,31 @@
       "intent": "HowAmIDoingIntent"
     },
     {
+      "intent": "StopIntent"
+    },
+    {
+      "intent": "SetCalorieGoalIntent",
+      "slots": [
+      {
+        "name": "ItemNumber",
+        "type": "AMAZON.NUMBER"
+      }
+      ]
+    },
+    {
+      "intent": "GetItemInfoIntent",
+      "slots": [
+        {
+          "name": "NutrientType",
+          "type": "LIST_OF_NUTRIENT_TYPES"
+        },
+        {
+          "name": "ItemName",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {
