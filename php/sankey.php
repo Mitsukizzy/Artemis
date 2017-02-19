@@ -41,6 +41,6 @@ foreach ($response['Items'] as $key => $value) {
     }
 } 
 
-echo json_encode($sankey_arr);
+echo json_encode($sankey_arr, JSON_NUMERIC_CHECK);
 return json_encode($sankey_arr);
 ?>

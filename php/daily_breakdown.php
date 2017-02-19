@@ -24,6 +24,7 @@ $marshaler = new Marshaler();
 $tableName = 'LoggedItems';
 unset($response); 
 
+$day = 0;
 $carbs = 0;
 $fiber = 0;
 $sugars = 0;
@@ -37,6 +38,7 @@ $response = $dynamodb->scan([
 
 // Actually prints out the data
 foreach ($response['Items'] as $key => $value) {
+    $day = $value["Day"]['N'];
     $carbs +=  $value['Carbs']['N'];
     $fiber +=  $value['Fiber']['N'];
     $sugars +=  $value['Sugars']['N'];
@@ -44,10 +46,10 @@ foreach ($response['Items'] as $key => $value) {
     $fats +=  $value['Fats']['N'];
 } 
 $php_array = array(
-    array("Carbs", "Fiber", "Sugars", "Protein", "Fats"), 
-    array($carbs, $fiber, $sugars, $protein, $fats), 
+    array("Date", "Carbs", "Fiber", "Sugars", "Protein", "Fats"), 
+    array($day, $carbs, $fiber, $sugars, $protein, $fats), 
 );
 
-echo json_encode($php_array);
+echo json_encode($php_array, JSON_NUMERIC_CHECK);
 return json_encode($php_array);
 ?>
