@@ -28,6 +28,15 @@
       "intent": "StopIntent"
     },
     {
+      "intent": "SetCalorieGoalIntent",
+      "slots": [
+      {
+        "name": "ItemNumber",
+        "type": "AMAZON.NUMBER"
+      }
+      ]
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {
