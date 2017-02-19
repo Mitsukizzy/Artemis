@@ -66,3 +66,16 @@ SetCalorieGoalIntent set my calorie goal to {ItemNumber} calories today
 SetCalorieGoalIntent set my calorie goal to {ItemNumber} calories
 SetCalorieGoalIntent set the calorie goal to {ItemNumber} calories today
 SetCalorieGoalIntent set the calorie goal to {ItemNumber} calories
+
+GetItemInfoIntent what is the {NutrientType} count of {ItemName}
+GetItemInfoIntent how many {NutrientType} are in {ItemName}
+GetItemInfoIntent how much {NutrientType} is in {ItemName}
+GetItemInfoIntent how many {NutrientType} are in a {ItemName}
+GetItemInfoIntent how much {NutrientType} is in a {ItemName}
+GetItemInfoIntent how many {NutrientType} does {ItemName} have
+GetItemInfoIntent how much {NutrientType} does {ItemName} have
+GetItemInfoIntent how many {NutrientType} does a {ItemName} have
+GetItemInfoIntent how much {NutrientType} does a {ItemName} have
+
+
+

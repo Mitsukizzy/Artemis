@@ -411,19 +411,70 @@ var handlers = {
                 Id: 1
             },
             UpdateExpression: "set CalorieGoal=:c",
-                        ExpressionAttributeValues: {
-                            ":c":myNum,
-                        }
-                    };
-                    docClient.update(updateParams).promise().then((data) => {
-                        var speechOutput = 'Ok, your daily goal is now set to ' + myNum + ' calories.'
-                        speechOutput += ' Anything else?';
-                        var reprompt = 'Anything else?';
-                        this.emit(':ask', speechOutput, reprompt);
-                    })
-                    .catch((err) => console.log(err));        
+            ExpressionAttributeValues: {
+                ":c":myNum,
+            }
+        };
+        docClient.update(updateParams).promise().then((data) => {
+            var speechOutput = 'Ok, your daily goal is now set to ' + myNum + ' calories.'
+            speechOutput += ' Anything else?';
+            var reprompt = 'Anything else?';
+            this.emit(':ask', speechOutput, reprompt);
+        })
+        .catch((err) => console.log(err));        
+    },
+    'GetItemInfoIntent': function () {
+        var myIntent = this.event.request.intent;
+        var myItemName = myIntent.slots.ItemName.value;
+        var myNutrientType = myIntent.slots.NutrientType.value;
+        if (myItemName == undefined || myNutrientType == undefined) {
+            this.emit(':tell', 'I am sorry, I did not catch that');
+        }
 
+        request.get({
+            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemName,
+            qs: {
+                appId: '27d56daa',
+                appKey: '801497a4013af4e17085d5d46e305d0e',
+                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+            }
+        }, (err, response, body) => {
+            if (response.status === 200) {
+                console.log("results error");
+            }
 
+            var parsed = JSON.parse(body);
+            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories']);
+            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat']);
+            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate']);
+            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber']);
+            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars']);
+            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein']);
+            var speechOutput = "On average, a " + myItemName + " has "
+            if (myNutrientType === 'carb') {
+                speechOutput = speechOutput + myCarbs + " grams of carbohydrates per serving.";    
+            }
+            else if (myNutrientType === 'calories') {
+                speechOutput = speechOutput + myCalories + " calories per serving.";    
+            }
+            else if (myNutrientType === 'sugar') {
+                speechOutput = speechOutput + mySugars + " grams of sugars per serving.";    
+            }
+            else if (myNutrientType === 'fat') {
+                speechOutput = speechOutput + myFats + " grams of fat per serving.";    
+            }
+            else if (myNutrientType === 'fiber') {
+                speechOutput = speechOutput + myFiber + " grams of fiber per serving.";    
+            }
+            else
+            {
+                speechOutput = speechOutput + myProtein + " grams of protein per serving.";    
+            }
+
+            speechOutput += ' Anything else?';
+            var reprompt = 'Anything else?';
+            this.emit(':ask', speechOutput, reprompt);
+        });
     }
 
 };
