@@ -111,6 +111,7 @@ ShouldIEatIntent should I have {ItemName} for lunch
 ShouldIEatIntent should I have {ItemName} for dinner
 ShouldIEatIntent should I have {ItemName} as a snack
 ShouldIEatIntent should I have {ItemName}
+ShouldIEatIntent should I have {ItemName} today
 ShouldIEatIntent can I have {ItemName} for breakfast today
 ShouldIEatIntent can I have {ItemName} for lunch today
 ShouldIEatIntent can I have {ItemName} for dinner today
@@ -121,6 +122,7 @@ ShouldIEatIntent can I have {ItemName} for lunch
 ShouldIEatIntent can I have {ItemName} for dinner
 ShouldIEatIntent can I have {ItemName} as a snack
 ShouldIEatIntent can I have {ItemName}
+ShouldIEatIntent can I have {ItemName} today
 ShouldIEatIntent should I eat {ItemName} for breakfast today
 ShouldIEatIntent should I eat {ItemName} for lunch today
 ShouldIEatIntent should I eat {ItemName} for dinner today
@@ -131,6 +133,7 @@ ShouldIEatIntent should I eat {ItemName} for lunch
 ShouldIEatIntent should I eat {ItemName} for dinner
 ShouldIEatIntent should I eat {ItemName} as a snack
 ShouldIEatIntent should I eat {ItemName}
+ShouldIEatIntent should I eat {ItemName} today
 ShouldIEatIntent can I eat {ItemName} for breakfast today
 ShouldIEatIntent can I eat {ItemName} for lunch today
 ShouldIEatIntent can I eat {ItemName} for dinner today
@@ -141,6 +144,7 @@ ShouldIEatIntent can I eat {ItemName} for lunch
 ShouldIEatIntent can I eat {ItemName} for dinner
 ShouldIEatIntent can I eat {ItemName} as a snack
 ShouldIEatIntent can I eat {ItemName}
+ShouldIEatIntent can I eat {ItemName} today
 ShouldIEatIntent should I have a {ItemName} for breakfast today
 ShouldIEatIntent should I have a {ItemName} for lunch today
 ShouldIEatIntent should I have a {ItemName} for dinner today
@@ -151,6 +155,7 @@ ShouldIEatIntent should I have a {ItemName} for lunch
 ShouldIEatIntent should I have a {ItemName} for dinner
 ShouldIEatIntent should I have a {ItemName} as a snack
 ShouldIEatIntent should I have a {ItemName}
+ShouldIEatIntent should I have a {ItemName} today
 ShouldIEatIntent can I have a {ItemName} for breakfast today
 ShouldIEatIntent can I have a {ItemName} for lunch today
 ShouldIEatIntent can I have a {ItemName} for dinner today
@@ -161,6 +166,7 @@ ShouldIEatIntent can I have a {ItemName} for lunch
 ShouldIEatIntent can I have a {ItemName} for dinner
 ShouldIEatIntent can I have a {ItemName} as a snack
 ShouldIEatIntent can I have a {ItemName}
+ShouldIEatIntent can I have a {ItemName} today
 ShouldIEatIntent should I eat a {ItemName} for breakfast today
 ShouldIEatIntent should I eat a {ItemName} for lunch today
 ShouldIEatIntent should I eat a {ItemName} for dinner today
@@ -171,6 +177,7 @@ ShouldIEatIntent should I eat a {ItemName} for lunch
 ShouldIEatIntent should I eat a {ItemName} for dinner
 ShouldIEatIntent should I eat a {ItemName} as a snack
 ShouldIEatIntent should I eat a {ItemName}
+ShouldIEatIntent should I eat a {ItemName} today
 ShouldIEatIntent can I eat a {ItemName} for breakfast today
 ShouldIEatIntent can I eat a {ItemName} for lunch today
 ShouldIEatIntent can I eat a {ItemName} for dinner today
@@ -181,9 +188,13 @@ ShouldIEatIntent can I eat a {ItemName} for lunch
 ShouldIEatIntent can I eat a {ItemName} for dinner
 ShouldIEatIntent can I eat a {ItemName} as a snack
 ShouldIEatIntent can I eat a {ItemName}
+ShouldIEatIntent can I eat a {ItemName} today
 
 YesIntent yes
 YesIntent yes please
 YesIntent sure
 YesIntent ok
 
+MakeQuickGoalIntent make a quick goal for {ItemNumber} {ItemName}
+MakeQuickGoalIntent I want to eat {ItemNumber} {ItemName}
+MakeQuickGoalIntent I want to have {ItemNumber} {ItemName}

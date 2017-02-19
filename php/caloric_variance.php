@@ -17,12 +17,11 @@ $sdk = new Aws\Sdk([
     ]
 ]);
 
-
 $dynamodb = $sdk->createDynamoDb();
 $marshaler = new Marshaler();
 
 $tableName = 'LoggedItems';
-$sankey_arr = array();
+$cal_arry = array();
 unset($response); 
 
 // Scan table and loop through rows to add to table
@@ -33,14 +32,10 @@ $response = $dynamodb->scan([
 // Actually prints out the data
 foreach ($response['Items'] as $key => $value) {
     foreach ($value['Items']['M'] as $iKey => $iValue) {            
-        $sankey_arr[] = array($iKey, 'Carbs', $value['Carbs']['N']);
-        $sankey_arr[] = array($iKey, 'Fiber', $value['Fiber']['N']);      
-        $sankey_arr[] = array($iKey, 'Sugars', $value['Sugars']['N']);       
-        $sankey_arr[] = array($iKey, 'Protein', $value['Protein']['N']);         
-        $sankey_arr[] = array($iKey, 'Fats', $value['Fats']['N']);           
+        $cal_arry[] = array($value['HourMinute']['S'], $value['Calories']['N'], rand( 10, 25));
     }
 } 
 
-echo json_encode($sankey_arr);
-return json_encode($sankey_arr);
+echo json_encode($cal_arry, JSON_NUMERIC_CHECK);
+return json_encode($cal_arry);
 ?>

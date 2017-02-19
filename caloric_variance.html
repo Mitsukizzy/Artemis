@@ -178,9 +178,7 @@
             $.ajax({
                 url:'/php/caloric_variance.php',
                 complete: function (response) {
-                    //$('#logTable').html( response.responseText );
-                    console.log("success1", response);
-                    console.log("success2", response.responseText);
+                    console.log("caloric variance", response.responseText);
                     //setTimeout(refreshCharts, 7500);
                 },
                 error: function () {
