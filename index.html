@@ -264,7 +264,7 @@
     <script type="text/javascript">
          function refreshTable() {
             $.ajax({
-                url:'queries.php',
+                url:'/php/logtable.php',
                 complete: function (response) {
                     $('#logTable').html( response.responseText );
                     setTimeout(refreshTable, 7500);

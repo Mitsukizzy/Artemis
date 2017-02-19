@@ -145,6 +145,25 @@
     <script type="text/javascript" src="assets/js/gritter/js/jquery.gritter.js"></script>
     <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
   
+    <script type="text/javascript">
+        function refreshCharts() {
+            $.ajax({
+                url:'/php/daily_breakdown.php',
+                complete: function (response) {
+                    //$('#logTable').html( response.responseText );
+                    console.log("success1", response);
+                    console.log("success2", response.responseText);
+                    //setTimeout(refreshCharts, 7500);
+                },
+                error: function () {
+                    //$('#logTable').html('An error has occured!');
+                    //setTimeout(refreshCharts, 7500);
+                }
+            });
+            return false;
+        }
+        refreshCharts();
+    </script>
 
   </body>
 </html>
