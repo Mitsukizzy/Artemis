@@ -50,6 +50,23 @@
       ]
     },
     {
+      "intent": "GetMultipleItemsInfoIntent",
+      "slots": [
+        {
+          "name": "NutrientType",
+          "type": "LIST_OF_NUTRIENT_TYPES"
+        },
+        {
+          "name": "ItemNumber",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "ItemName",
+          "type": "LIST_OF_ITEM_NAMES"
+        }
+      ]
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {

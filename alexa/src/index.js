@@ -475,6 +475,62 @@ var handlers = {
             var reprompt = 'Anything else?';
             this.emit(':ask', speechOutput, reprompt);
         });
+    },
+    'GetMultipleItemsInfoIntent': function () {
+        var myIntent = this.event.request.intent;
+        var myItemName = myIntent.slots.ItemName.value;
+        var myNutrientType = myIntent.slots.NutrientType.value;
+
+        if (myItemName == undefined || myNutrientType == undefined || myIntent.slots.ItemNumber.value == undefined) {
+            this.emit(':tell', 'I am sorry, I did not catch that');
+        }
+        var myItemNum = parseInt(myIntent.slots.ItemNumber.value);
+
+
+        request.get({
+            uri: 'https://api.nutritionix.com/v1_1/search/' + myItemName,
+            qs: {
+                appId: '27d56daa',
+                appKey: '801497a4013af4e17085d5d46e305d0e',
+                fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_dietary_fiber,nf_sugars,nf_protein,nf_total_carbohydrate'
+            }
+        }, (err, response, body) => {
+            if (response.status === 200) {
+                console.log("results error");
+            }
+
+            var parsed = JSON.parse(body);
+            var myCalories = Math.floor(parsed['hits'][0]['fields']['nf_calories']) *myItemNum;
+            var myFats = Math.floor(parsed['hits'][0]['fields']['nf_total_fat']) *myItemNum;
+            var myCarbs = Math.floor(parsed['hits'][0]['fields']['nf_total_carbohydrate']) *myItemNum;
+            var myFiber = Math.floor(parsed['hits'][0]['fields']['nf_dietary_fiber']) *myItemNum;
+            var mySugars = Math.floor(parsed['hits'][0]['fields']['nf_sugars']) *myItemNum;
+            var myProtein = Math.floor(parsed['hits'][0]['fields']['nf_protein']) *myItemNum;
+            var speechOutput = "On average, " + myItemNum + " servings of " + myItemName + " has "
+            if (myNutrientType === 'carb') {
+                speechOutput = speechOutput + myCarbs + " grams of carbohydrates total.";    
+            }
+            else if (myNutrientType === 'calories') {
+                speechOutput = speechOutput + myCalories + " calories total.";    
+            }
+            else if (myNutrientType === 'sugar') {
+                speechOutput = speechOutput + mySugars + " grams of sugars total.";    
+            }
+            else if (myNutrientType === 'fat') {
+                speechOutput = speechOutput + myFats + " grams of fat total.";    
+            }
+            else if (myNutrientType === 'fiber') {
+                speechOutput = speechOutput + myFiber + " grams of fiber total.";    
+            }
+            else
+            {
+                speechOutput = speechOutput + myProtein + " grams of protein total.";    
+            }
+
+            speechOutput += ' Anything else?';
+            var reprompt = 'Anything else?';
+            this.emit(':ask', speechOutput, reprompt);
+        });
     }
 
 };

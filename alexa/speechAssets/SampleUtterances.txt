@@ -77,5 +77,11 @@ GetItemInfoIntent how much {NutrientType} does {ItemName} have
 GetItemInfoIntent how many {NutrientType} does a {ItemName} have
 GetItemInfoIntent how much {NutrientType} does a {ItemName} have
 
+GetMultipleItemsInfoIntent what is the {NutrientType} count of {ItemNumber} {ItemName}
+GetMultipleItemsInfoIntent how many {NutrientType} are in {ItemNumber} {ItemName}
+GetMultipleItemsInfoIntent how much {NutrientType} is in {ItemNumber} {ItemName}
+GetMultipleItemsInfoIntent how many {NutrientType} does {ItemNumber} {ItemName} have
+GetMultipleItemsInfoIntent how much {NutrientType} does {ItemNumber} {ItemName} have 
+
 
 
