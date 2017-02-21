@@ -24,7 +24,12 @@ $marshaler = new Marshaler();
 $tableName = 'LoggedItems';
 unset($response); 
 
-$breakdown = array();
+$day = 0;
+$carbs = 0;
+$fiber = 0;
+$sugars = 0;
+$protein = 0;
+$fats = 0;
 
 // Scan table and loop through rows to add to table
 $response = $dynamodb->scan([
@@ -33,9 +38,22 @@ $response = $dynamodb->scan([
 
 // Actually prints out the data
 foreach ($response['Items'] as $key => $value) {
-    $breakdown[] = array($value["Day"]['N'], $value['Carbs']['N'], $value['Fiber']['N'], $value['Sugars']['N'], $value['Protein']['N'], $value['Fats']['N']);
+    $day = $value["Day"]['N'];
+    $carbs +=  $value['Carbs']['N'];
+    $fiber +=  $value['Fiber']['N'];
+    $sugars +=  $value['Sugars']['N'];
+    $protein +=  $value['Protein']['N'];
+    $fats +=  $value['Fats']['N'];
 } 
+$php_array = array(
+    array('Food Category', 'grams per Day'), 
+    array('Carbs', $carbs), 
+    array('Fiber', $fiber), 
+    array('Sugars', $sugars), 
+    array('Protein', $protein), 
+    array('Fats', $fats)
+);
 
-echo json_encode($breakdown, JSON_NUMERIC_CHECK);
-return json_encode($breakdown);
+echo json_encode($php_array, JSON_NUMERIC_CHECK);
+return json_encode($php_array);
 ?>

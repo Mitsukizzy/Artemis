@@ -32,14 +32,16 @@
             data.addColumn('string', 'From');
             data.addColumn('string', 'To');
             data.addColumn('number', 'Weight');
-            data.addRows(sankey_table);
+            
+            var arr = JSON.parse(sankey_table);
+            data.addRows(arr);
 
             var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
                     '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
 
             // Set chart options
             var options = {
-            width: 600,
+            width: 900,
             sankey: {
                 node: {
                 colors: colors,
@@ -114,7 +116,6 @@
                           <li><a class="active" href="sankey.html">Item Percentage</a></li>
                           <li><a href="water_log.html">Water Log</a></li>
                           <li><a href="caloric_variance.html">Caloric Variance</a></li>
-                          <li><a href="chartjs.html">Chartjs</a></li>
                       </ul>
                   </li>
 
@@ -133,7 +134,7 @@
           <section class="wrapper">
           <div class="showback">
           <h4><i class="fa fa-angle-right"></i>Item Percentage</h4>
-          <div id="sankey_multiple" style="width: 900px; height: 300px;"></div>  
+          <div id="sankey_multiple" style="width: 900px; height: 500px;"></div>  
           </div>   
 
 		</section><!--/wrapper -->
@@ -174,8 +175,7 @@
             $.ajax({
                 url:'/php/sankey.php',
                 complete: function (response) {
-                    //$('#logTable').html( response.responseText );
-                    console.log("success2", response.responseText);
+                    console.log("sank");
                     drawChart(response.responseText);
                     setTimeout(refreshCharts, 7500);
                 },

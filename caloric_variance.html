@@ -25,7 +25,7 @@
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
+      function drawChart(var_arr) {
         var data = new google.visualization.DataTable();
         data.addColumn('number', 'x');
         data.addColumn('number', 'values');
@@ -36,15 +36,8 @@
         data.addColumn({id:'i2', type:'number', role:'interval'});
         data.addColumn({id:'i2', type:'number', role:'interval'});
   
-        data.addRows([
-            [1, 100, 90, 110, 85, 96, 104, 120],
-            [2, 120, 95, 130, 90, 113, 124, 140],
-            [3, 130, 105, 140, 100, 117, 133, 139],
-            [4, 90, 85, 95, 85, 88, 92, 95],
-            [5, 70, 74, 63, 67, 69, 70, 72],
-            [6, 30, 39, 22, 21, 28, 34, 40],
-            [7, 80, 77, 83, 70, 77, 85, 90],
-            [8, 100, 90, 110, 85, 95, 102, 110]]);
+        var arr = JSON.parse(var_arr);
+        data.addRows(arr);
 
         // The intervals data as narrow lines (useful for showing raw source data)
         var options_lines = {
@@ -118,7 +111,6 @@
                           <li><a href="sankey.html">Item Percentage</a></li>
                           <li><a href="water_log.html">Water Log</a></li>
                           <li><a class="active" href="caloric_variance.html">Caloric Variance</a></li>
-                          <li><a href="chartjs.html">Chartjs</a></li>
                       </ul>
                   </li>
 
@@ -178,8 +170,9 @@
             $.ajax({
                 url:'/php/caloric_variance.php',
                 complete: function (response) {
-                    console.log("caloric variance", response.responseText);
-                    //setTimeout(refreshCharts, 7500);
+                    console.log("caloric variance", response.responseText);                    
+                    drawChart(response.responseText);
+                    setTimeout(refreshCharts, 7500);
                 },
                 error: function () {
                     //$('#logTable').html('An error has occured!');
@@ -188,7 +181,10 @@
             });
             return false;
         }
-        refreshCharts();
+
+        $( document ).ready(function() {
+            refreshCharts();
+        });
     </script>
 
   </body>

@@ -30,17 +30,10 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
+      function drawChart(breakdown) {
 
-        var data = google.visualization.arrayToDataTable([
-          ['Food Category', 'grams per Day'],
-          ['Fats',     11],
-          ['Carbohydrates',      2],
-          ['Fibers',  2],
-          ['Sugars', 2],
-          ['Protein',    7]
-        ]);
+        var arr = JSON.parse(breakdown);
+        var data = google.visualization.arrayToDataTable(arr);
 
         var options = {
           legend: 'none',
@@ -108,7 +101,6 @@
                           <li><a href="sankey.html">Item Percentage</a></li>
                           <li><a href="water_log.html">Water Log</a></li>
                           <li><a href="caloric_variance.html">Caloric Variance</a></li>
-                          <li><a href="chartjs.html">Chartjs</a></li>
                       </ul>
                   </li>
 
@@ -154,27 +146,30 @@
       			<div class="col-lg-6 col-md-6 col-sm-12">
       				<!-- BASIC PROGRESS BARS -->
       				<div class="showback">
-      					<h4><i class="fa fa-angle-right"></i>Quick Goals</h4>
+      					<h4><i class="fa fa-angle-right"></i>Weekly Quick Goals</h4>
 	      				<div class="progress">
 						  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-						    <span class="sr-only">40% Complete (success)</span>
+						    <h4 id="goal1"><i class="fa"></i>Goals</h4>
+                            <span class="sr-only">40% Complete (success)</span>
 						  </div>
 						</div>
 						<div class="progress">
 						  <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-						    <span class="sr-only">20% Complete</span>
+						    <h4 id="goal2"><i class="fa"></i></h4>
+                            <span class="sr-only">20% Complete</span>
 						  </div>
 						</div>
 						<div class="progress">
 						  <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-						    <span class="sr-only">60% Complete (warning)</span>
+						    <h4 id="goal3"><i class="fa"></i></h4>
+                            <span class="sr-only">60% Complete (warning)</span>
 						  </div>
 						</div>
 
 						<div class="progress">
 						  <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-						    <h4><i class="fa"></i>Eat five apples this week</h4>
-                <span class="sr-only">80% Complete</span>
+						    <h4 id="goal4"><i class="fa"></i></h4>
+                            <span class="sr-only">80% Complete</span>
 						  </div>
 						</div>
 
@@ -279,11 +274,33 @@
             });
             return false;
         }
-        refreshTable();
+
+         function refreshChart() {
+            $.ajax({
+                url:'/php/daily_index.php',
+                complete: function (response) {
+                    console.log("index", response.responseText);
+                    drawChart(response.responseText);
+                    setTimeout(refreshChart, 7500);
+                },
+                error: function () {
+                    $('#logTable').html('An error has occured!');
+                    setTimeout(refreshChart, 7500);
+                }
+            });
+            return false;
+        }
+
+        // Initial calls
+        $( document ).ready(function() {
+            refreshTable();
+            refreshChart();
+        });
     </script>
 
     <script>
         var foodItems = [];
+        var goals = [];
         
         AWS.config.update({
             region: "us-east-1",
@@ -317,16 +334,29 @@
             });
         }
 
+        var foodGoals = new Array();
+        var currentQuantity = new Array();
+        var quantityGoals = new Array();
         // Get all the timestamps and order it
         var db = new AWS.DynamoDB.DocumentClient();
         db.scan({
-            TableName: 'LoggedItems',
+            TableName: 'User',
             
         }, (err, data) => {
             if(err) console.error(err);
             else {
-                foodItems = data.Items;
-                console.log('Scan success. Data: ', foodItems);
+                userItems = data.Items[0];
+                console.log('Scan success. Data: ', userItems);
+                goalList = userItems.Goals; 
+                
+                for(i in goalList) {
+                    foodGoals.push(i);
+                    quantityGoals.push(Math.floor(goalList[i]));
+                }
+                $('#goal1').html( "Eat " + quantityGoals[0] + " " + foodGoals[0] + "(s)" );
+                $('#goal2').html( "Eat " + quantityGoals[1] + " " + foodGoals[1] + "(s)" );
+                $('#goal3').html( "Eat " + quantityGoals[2] + " " + foodGoals[2] + "(s)" );
+                $('#goal4').html( "Eat " + quantityGoals[3] + " " + foodGoals[3] + "(s)" );
             }
         });
 
