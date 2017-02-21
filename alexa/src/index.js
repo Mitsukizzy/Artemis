@@ -179,10 +179,16 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                    var goalMet = false;
                     var goals = data.Item.Goals;
-                        if (goals[myItemName] != undefined) {
+                    if (goals[myItemName] != undefined) {
                             goals[myItemName] = goals[myItemName] + 0.01;
-                        }
+                            var multiplied = Math.ceil((goals[myItemName] * 100)%100);
+                            if (multiplied >= Math.floor(goals[myItemName])) {
+                                delete goals[myItemName];
+                                goalMet = true;
+                            }
+                    }
 
                     var updateParams = {
                         TableName: 'User',
@@ -207,6 +213,9 @@ var handlers = {
                             speechOutput = speechOutput + calorieDiff + " calories under your goal today.";
                         } else {
                             speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
+                        }
+                        if (goalMet) {
+                            speechOutput += ' You also met a quick goal.';
                         }
                         speechOutput += ' Anything else?';
                         var reprompt = 'Anything else?';
@@ -337,10 +346,16 @@ var handlers = {
 
                     var calorieGoal = data.Item.CalorieGoal;
 
+                    var goalMet = false;
                     var goals = data.Item.Goals;
                     if (goals[myItemName] != undefined) {
-                            goals[myItemName] = goals[myItemName] + 0.01*myItemNum;
+                        goals[myItemName] = goals[myItemName] + 0.01*myItemNum;
+                            if (multiplied >= Math.floor(goals[myItemName])) {
+                                delete goals[myItemName];
+                                goalMet = true;
+                            }
                     }
+
 
                     var updateParams = {
                         TableName: 'User',
@@ -365,6 +380,9 @@ var handlers = {
                             speechOutput = speechOutput + calorieDiff + " calories under your goal today.";
                         } else {
                             speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
+                        }
+                                                if (goalMet) {
+                            speechOutput += ' You also met a quick goal.';
                         }
                         speechOutput += ' Anything else?';
                         var reprompt = 'Anything else?';
@@ -678,10 +696,15 @@ var handlers = {
                     var newProtein = oldProtein + myProtein;
 
                     var calorieGoal = data.Item.CalorieGoal;
+                    var goalMet = false;
 
                     var goals = data.Item.Goals;
                     if (goals[myItemNameA] != undefined) {
                             goals[myItemNameA] = goals[myItemNameA] + 0.01*myItemNumA;
+                                    if (multiplied >= Math.floor(goals[myItemNameA])) {
+                                delete goals[myItemNameA];
+                                goalMet = true;
+                            }
                     }
 
 
@@ -787,10 +810,15 @@ var handlers = {
                                     var newProtein = oldProtein + myProtein;
 
                                     var calorieGoal = data.Item.CalorieGoal;
+                    var goalMet = false;
 
                                                         var goals = data.Item.Goals;
                     if (goals[myItemNameB] != undefined) {
                             goals[myItemNameB] = goals[myItemNameB] + 0.01*myItemNumB;
+                                            if (multiplied >= Math.floor(goals[myItemNameB])) {
+                                delete goals[myItemNameB];
+                                goalMet = true;
+                            }
                     }
 
                                     var updateParams = {
@@ -818,6 +846,9 @@ var handlers = {
                                         } else {
                                             speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
                                         }
+                                                                if (goalMet) {
+                            speechOutput += ' You also met a quick goal.';
+                        }
                                         speechOutput += ' Anything else?';
                                         var reprompt = 'Anything else?';
                                         this.emit(':ask', speechOutput, reprompt);
@@ -953,10 +984,15 @@ var handlers = {
                     var newProtein = oldProtein + myProtein;
 
                     var calorieGoal = data.Item.CalorieGoal;
+                    var goalMet = false;
 
                                         var goals = data.Item.Goals;
                     if (goals[myItemNameA] != undefined) {
                             goals[myItemNameA] = goals[myItemNameA] + 0.01*myItemNumA;
+                            if (multiplied >= Math.floor(goals[myItemNameA])) {
+                                delete goals[myItemNameA];
+                                goalMet = true;
+                            }
                     }
 
                     var updateParams = {
@@ -1061,9 +1097,15 @@ var handlers = {
                                     var newProtein = oldProtein + myProtein;
 
                                     var calorieGoal = data.Item.CalorieGoal;
+                                                        var goalMet = false;
+
                                                         var goals = data.Item.Goals;
                     if (goals[myItemNameB] != undefined) {
                             goals[myItemNameB] = goals[myItemNameB] + 0.01*myItemNumB;
+                            if (multiplied >= Math.floor(goals[myItemNameB])) {
+                                delete goals[myItemNameB];
+                                goalMet = true;
+                            }
                     }
 
                                     var updateParams = {
@@ -1091,6 +1133,9 @@ var handlers = {
                                         } else {
                                             speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
                                         }
+                                                                if (goalMet) {
+                            speechOutput += ' You also met a quick goal.';
+                        }
                                         speechOutput += ' Anything else?';
                                         var reprompt = 'Anything else?';
                                         this.emit(':ask', speechOutput, reprompt);
@@ -1226,10 +1271,15 @@ var handlers = {
                     var newProtein = oldProtein + myProtein;
 
                     var calorieGoal = data.Item.CalorieGoal;
+                    var goalMet = false;
 
                     var goals = data.Item.Goals;
                     if (goals[myItemNameA] != undefined) {
                             goals[myItemNameA] = goals[myItemNameA] + 0.01*myItemNumA;
+                                if (multiplied >= Math.floor(goals[myItemNameA])) {
+                                delete goals[myItemNameA];
+                                goalMet = true;
+                            }
                     }
 
                     var updateParams = {
@@ -1334,10 +1384,15 @@ var handlers = {
                                     var newProtein = oldProtein + myProtein;
 
                                     var calorieGoal = data.Item.CalorieGoal;
+                    var goalMet = false;
 
                                                         var goals = data.Item.Goals;
                     if (goals[myItemNameB] != undefined) {
                             goals[myItemNameB] = goals[myItemNameB] + 0.01*myItemNumB;
+                                                        if (multiplied >= Math.floor(goals[myItemNameB])) {
+                                delete goals[myItemNameB];
+                                goalMet = true;
+                            }
                     }
 
                                     var updateParams = {
@@ -1365,6 +1420,9 @@ var handlers = {
                                         } else {
                                             speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
                                         }
+                                                                if (goalMet) {
+                            speechOutput += ' You also met a quick goal.';
+                        }
                                         speechOutput += ' Anything else?';
                                         var reprompt = 'Anything else?';
                                         this.emit(':ask', speechOutput, reprompt);
@@ -1500,10 +1558,15 @@ var handlers = {
                     var newProtein = oldProtein + myProtein;
 
                     var calorieGoal = data.Item.CalorieGoal;
+                    var goalMet = false;
 
                                         var goals = data.Item.Goals;
                     if (goals[myItemNameA] != undefined) {
                             goals[myItemNameA] = goals[myItemNameA] + 0.01*myItemNumA;
+                                                        if (multiplied >= Math.floor(goals[myItemNameA])) {
+                                delete goals[myItemNameA];
+                                goalMet = true;
+                            }
                     }
 
                     var updateParams = {
@@ -1608,10 +1671,15 @@ var handlers = {
                                     var newProtein = oldProtein + myProtein;
 
                                     var calorieGoal = data.Item.CalorieGoal;
+                    var goalMet = false;
 
                                                         var goals = data.Item.Goals;
                     if (goals[myItemNameB] != undefined) {
                             goals[myItemNameB] = goals[myItemNameB] + 0.01*myItemNumB;
+                                                        if (multiplied >= Math.floor(goals[myItemNameB])) {
+                                delete goals[myItemNameB];
+                                goalMet = true;
+                            }
                     }
 
                                     var updateParams = {
@@ -1639,6 +1707,9 @@ var handlers = {
                                         } else {
                                             speechOutput = speechOutput + Math.abs(calorieDiff) + " calories over your goal today."
                                         }
+                                                                if (goalMet) {
+                            speechOutput += ' You also met a quick goal.';
+                        }
                                         speechOutput += ' Anything else?';
                                         var reprompt = 'Anything else?';
                                         this.emit(':ask', speechOutput, reprompt);
@@ -1842,10 +1913,15 @@ var handlers = {
                     var newProtein = oldProtein + myProtein;
 
                     var calorieGoal = data.Item.CalorieGoal;
+                    var goalMet = false;
 
                                         var goals = data.Item.Goals;
                     if (goals[myItemName] != undefined) {
                             goals[myItemName] = goals[myItemName] + 0.01;
+                                                        if (multiplied >= Math.floor(goals[myItemName])) {
+                                delete goals[myItemName];
+                                goalMet = true;
+                            }
                     }
 
                     var updateParams = {
@@ -1866,6 +1942,9 @@ var handlers = {
                     };
                     docClient.update(updateParams).promise().then((data) => {
                         var speechOutput = 'Ok, I logged the ' + myItemName + '.';
+                                                if (goalMet) {
+                            speechOutput += ' You also met a quick goal.';
+                        }
                         speechOutput += ' Anything else?';
                         var reprompt = 'Anything else?';
                         this.emit(':ask', speechOutput, reprompt);

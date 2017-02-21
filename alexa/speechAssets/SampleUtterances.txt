@@ -26,6 +26,34 @@ LogItemIntent and I also ate a {ItemName}
 LogItemIntent oh and I also ate a {ItemName}
 LogItemIntent and I also had a {ItemName}
 LogItemIntent oh and I also had a {ItemName}
+LogItemIntent I just ate {ItemName}
+LogItemIntent I just ate a {ItemName}
+LogItemIntent I just had a {ItemName}
+LogItemIntent I just had {ItemName}
+LogItemIntent and I just ate {ItemName}
+LogItemIntent oh and I just ate {ItemName}
+LogItemIntent and I just had {ItemName}
+LogItemIntent oh and I just had {ItemName}
+LogItemIntent and I just ate a {ItemName}
+LogItemIntent oh and I just ate a {ItemName}
+LogItemIntent and I just had a {ItemName}
+LogItemIntent oh and I just had a {ItemName}
+LogItemIntent and I just ate {ItemName} too
+LogItemIntent oh and I just ate {ItemName} too
+LogItemIntent and I just had {ItemName} too
+LogItemIntent oh and I just had {ItemName} too
+LogItemIntent and I just ate a {ItemName} too
+LogItemIntent oh and I just ate a {ItemName} too
+LogItemIntent and I just had a {ItemName} too
+LogItemIntent oh and I just had a {ItemName} too
+LogItemIntent and I also just ate {ItemName}
+LogItemIntent oh and I also just ate {ItemName}
+LogItemIntent and I also just had {ItemName}
+LogItemIntent oh and I also just had {ItemName}
+LogItemIntent and I also just ate a {ItemName}
+LogItemIntent oh and I also just ate a {ItemName}
+LogItemIntent and I also just had a {ItemName}
+LogItemIntent oh and I also just had a {ItemName}
 
 LogMultipleItemsIntent I ate {ItemNumber} {ItemName}
 LogMultipleItemsIntent I had {ItemNumber} {ItemName}
@@ -42,15 +70,39 @@ LogMultipleItemsIntent oh and I also ate {ItemNumber} {ItemName}
 LogMultipleItemsIntent and I also had {ItemNumber} {ItemName}
 LogMultipleItemsIntent oh and I also had {ItemNumber} {ItemName}
 
+LogMultipleItemsIntent I just ate {ItemNumber} {ItemName}
+LogMultipleItemsIntent I just had {ItemNumber} {ItemName}
+LogMultipleItemsIntent and I just ate {ItemNumber} {ItemName}
+LogMultipleItemsIntent oh and I just ate {ItemName}
+LogMultipleItemsIntent and I just had {ItemNumber} {ItemName}
+LogMultipleItemsIntent oh and I just had {ItemNumber} {ItemName}
+LogMultipleItemsIntent and I just ate {ItemNumber} {ItemName} too
+LogMultipleItemsIntent oh and I just ate {ItemNumber} {ItemName} too
+LogMultipleItemsIntent and I just had {ItemNumber} {ItemName} too
+LogMultipleItemsIntent oh and I just had {ItemNumber} {ItemName} too
+LogMultipleItemsIntent and I also just ate {ItemNumber} {ItemName}
+LogMultipleItemsIntent oh and I also just ate {ItemNumber} {ItemName}
+LogMultipleItemsIntent and I also just had {ItemNumber} {ItemName}
+LogMultipleItemsIntent oh and I also just had {ItemNumber} {ItemName}
+
 LogMultipleItemsAndMultipleItemsIntent I ate {ItemNumberA} {ItemNameA} and {ItemNumberB} {ItemNameB}
+LogMultipleItemsAndMultipleItemsIntent I had {ItemNumberA} {ItemNameA} and {ItemNumberB} {ItemNameB}
+LogMultipleItemsAndMultipleItemsIntent I just ate {ItemNumberA} {ItemNameA} and {ItemNumberB} {ItemNameB}
+LogMultipleItemsAndMultipleItemsIntent I just had {ItemNumberA} {ItemNameA} and {ItemNumberB} {ItemNameB}
 
 LogMultipleItemsAndSingleItemIntent I ate {ItemNumberA} {ItemNameA} and a {ItemNameB}
 LogMultipleItemsAndSingleItemIntent I ate {ItemNumberA} {ItemNameA} and {ItemNameB}
 LogMultipleItemsAndSingleItemIntent I ate {ItemNumberA} {ItemNameA} and an {ItemNameB}
+LogMultipleItemsAndSingleItemIntent I had {ItemNumberA} {ItemNameA} and a {ItemNameB}
+LogMultipleItemsAndSingleItemIntent I had {ItemNumberA} {ItemNameA} and {ItemNameB}
+LogMultipleItemsAndSingleItemIntent I had {ItemNumberA} {ItemNameA} and an {ItemNameB}
 
 LogSingleItemAndMultipleItemsIntent I ate {ItemNameA} and {ItemNumberB} {ItemNameB}
 LogSingleItemAndMultipleItemsIntent I ate a {ItemNameA} and {ItemNumberB} {ItemNameB}
 LogSingleItemAndMultipleItemsIntent I ate an {ItemNameA} and {ItemNumberB} {ItemNameB}
+LogSingleItemAndMultipleItemsIntent I had {ItemNameA} and {ItemNumberB} {ItemNameB}
+LogSingleItemAndMultipleItemsIntent I had a {ItemNameA} and {ItemNumberB} {ItemNameB}
+LogSingleItemAndMultipleItemsIntent I had an {ItemNameA} and {ItemNumberB} {ItemNameB}
 
 LogSingleItemAndSingleItemIntent I ate {ItemNameA} and {ItemNameB}
 LogSingleItemAndSingleItemIntent I ate a {ItemNameA} and {ItemNameB}
@@ -59,6 +111,13 @@ LogSingleItemAndSingleItemIntent I ate a {ItemNameA} and a {ItemNameB}
 LogSingleItemAndSingleItemIntent I ate an {ItemNameA} and {ItemNameB}
 LogSingleItemAndSingleItemIntent I ate {ItemNameA} and an {ItemNameB}
 LogSingleItemAndSingleItemIntent I ate an {ItemNameA} and an {ItemNameB}
+LogSingleItemAndSingleItemIntent I had {ItemNameA} and {ItemNameB}
+LogSingleItemAndSingleItemIntent I had a {ItemNameA} and {ItemNameB}
+LogSingleItemAndSingleItemIntent I had {ItemNameA} and a {ItemNameB}
+LogSingleItemAndSingleItemIntent I had a {ItemNameA} and a {ItemNameB}
+LogSingleItemAndSingleItemIntent I had an {ItemNameA} and {ItemNameB}
+LogSingleItemAndSingleItemIntent I had {ItemNameA} and an {ItemNameB}
+LogSingleItemAndSingleItemIntent I had an {ItemNameA} and an {ItemNameB}
 
 HowAmIDoingIntent how am I doing
 HowAmIDoingIntent how am I
@@ -200,15 +259,20 @@ YesIntent sure log it
 YesIntent sounds good
 
 MakeQuickGoalIntent make a quick goal for {ItemNumber} {ItemName}
-MakeQuickGoalIntent I want to eat {ItemNumber} {ItemName}
-MakeQuickGoalIntent I want to have {ItemNumber} {ItemName}
+MakeQuickGoalIntent I want to eat {ItemNumber} {ItemName} this week
+MakeQuickGoalIntent I want to have {ItemNumber} {ItemName} this week
+MakeQuickGoalIntent make a goal for {ItemNumber} {ItemName}
 
 GetWaterIntent how much water have I drank
 GetWaterIntent how much water have I drank today
 GetWaterIntent how much water have I had today
 GetWaterIntent how much water have I had so far
+GetWaterIntent how much water have I had
+GetWaterIntent how am I doing with hydration
+GetWaterIntent how hydrated am I
 
 HealthyOptionIntent is there a healthier option
+HealthyOptionIntent what should I eat tonight
 HealthyOptionIntent what else could I have
 HealthyOptionIntent what should I eat today
 HealthyOptionIntent what else is there
